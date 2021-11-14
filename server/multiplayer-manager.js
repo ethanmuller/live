@@ -93,10 +93,6 @@ export default function(socketInstance) {
       socket.in(party).emit('party-end')
     })
 
-    socket.on('send-move', function () {
-      console.log('movin')
-    })
-
     socket.on('party-set-name', function (nickname) {
       const player = getPlayer(socket.id)
       player.nickname = nickname
@@ -131,6 +127,7 @@ export default function(socketInstance) {
         location: [3, 3],
         isClenched: false,
         type: opts.type,
+        color: opts.color,
         party: opts.party,
       }
 
@@ -145,6 +142,36 @@ export default function(socketInstance) {
 
         if (member) {
           member.location = location
+
+          getMembersList(member.party, (members) => {
+              const world = members
+              socket.to(member.party).emit('world-update', world)
+            })
+          }
+    })
+
+    socket.on('send-push', function(payload) {
+      console.log('got send push')
+        const member = world[payload.who]
+
+        if (member) {
+          member.location = payload.location
+
+          socket.to(payload.who).emit('move-you', payload.location)
+
+          getMembersList(member.party, (members) => {
+              const world = members
+              socket.to(member.party).emit('world-update', world)
+              console.log('sent push')
+            })
+          }
+    })
+
+    socket.on('color-change', function(color) {
+        const member = world[socket.id]
+
+        if (member) {
+          member.color = color
 
           getMembersList(member.party, (members) => {
               const world = members

@@ -4,6 +4,7 @@
     </main>
     <div id="controls">
       <Dpad @dpadRelease="dpadRelease" @dpadPress="dpadPress"></Dpad>
+      <input type="color" v-model="color">
     </div>
     <div v-if="dead" class="game-over-screen">
       <div>
@@ -55,138 +56,149 @@ const tileWidth = canvasSize / numTilesW;
 const tileHeight = canvasSize / numTilesH;
 
 const things = {
-  '#': {
-    name: 'wall',
-    solid: true,
-  },
+    '#': {
+        name: 'wall',
+        solid: true,
+    },
 
-  '@': {
-    name: 'spawn-point',
-    solid: false,
-  },
+    '@': {
+        name: 'spawn-point',
+        solid: false,
+    },
 
 }
 
 let spawnPoint;
 
 for (let y = 0; y < world.length; y++) {
-  for (let x = 0; x < world[0].length; x++) {
-    if(thingAtLocation(x, y).name === 'spawn-point') {
-      spawnPoint = { x, y }
+    for (let x = 0; x < world[0].length; x++) {
+        if(mapAtLocation(x, y).name === 'spawn-point') {
+            spawnPoint = { x, y }
+        }
     }
-  }
 }
 
-function thingAtLocation(x, y) {
-  const thing = world[y][x]
-  return things[thing] || {}
+function mapAtLocation(x, y) {
+    const thing = world[y][x]
+    return things[thing] || {}
 }
 
 export default {
-  props: ['socket', 'party'],
+    props: ['socket', 'party'],
 
-  async fetch () {
-    const self = this
+    async fetch () {
+        const self = this
 
-    return new Promise(function (resolve) {
-        return self.socket.emit('quest-join', {
-            type: 'normie',
-            party: self.$route.params.party,
+        return new Promise(function (resolve) {
+            return self.socket.emit('quest-join', {
+                type: 'normie',
+                party: self.$route.params.party,
+                color: self.color,
 
-        }, function (data) {
-            console.log(data)
-        return resolve({ world: data })
-      })
-    })
-  },
-  data () {
-    return {
-      message: '',
-      dead: false,
-      x: spawnPoint.x,
-      y: spawnPoint.y,
-      isClenched: false,
-      world: [
-        // [3, 3],
-        // [3, 4],
-      ],
-    }
-  },
-  head: {
-    title: 'QUEST',
-    link: [{ rel: 'icon', type: 'image/x-icon', href: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90'><text y='0.9em' x='-0.125em' font-size='80'>⚪</text></svg>" }],
-  },
-  watch: {
-  },
-  beforeMount () {
-    // this.socket.emit('join', { type: 'normie' }, function (data) {
-    //   this.world = data
-    // })
-
-    this.socket.on('world-update', (world) => {
-      this.world = world
-    })
-    this.socket.emit('send-move', [this.x, this.y])
-  },
-  setup() {
-    const [deathSound] = useSound(scare)
-
-    return {
-      deathSound,
-    }
-  },
-  mounted() {
-
-    let sketch = function (p5) {
-      p5.setup = _ => {
-        p5.createCanvas(canvasSize, canvasSize);
-        p5.ellipse(p5.width / 2, p5.height / 2, 500, 500);
-      }
-      p5.draw = _ => {
-        p5.background(0);
-        // p5.push();
-        // p5.translate(-this.x * tileWidth + p5.width/2, -this.y * tileWidth + p5.height/2);
-        p5.translate((this.x - this.x % 9) * tileWidth * -1, (this.y - this.y % 9) * tileWidth * -1);
-        // p5.ellipse(posX, y, 50, 50);
-        // p5.pop();
-        // posX += this.speed;
-
-        // if (posX > p5.width || posX < 0) {
-        //   this.speed *= -1;
-        // }
-
-
-        // draw static world
-        p5.fill("#666")
-        p5.rectMode(p5.RADIUS)
-        for (let y = 0; y < world.length; y++) {
-          for (let x = 0; x < world[0].length; x++) {
-            if(thingAtLocation(x, y).name === 'wall') {
-              p5.rect(x * tileWidth, y * tileHeight, tileWidth/2 + 1, tileHeight/2 + 1)
-            }
-          }
+            }, function (data) {
+                console.log(data)
+                self.world = data
+                return resolve({ world: data })
+            })
+        })
+    },
+    data () {
+        return {
+            message: '',
+            dead: false,
+            x: spawnPoint.x,
+            y: spawnPoint.y,
+            isClenched: false,
+            color: '#00ff00',
+            world: [
+                // [3, 3],
+                // [3, 4],
+            ],
         }
+    },
+    head: {
+        title: 'QUEST',
+        link: [{ rel: 'icon', type: 'image/x-icon', href: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90'><text y='0.9em' x='-0.125em' font-size='80'>⚪</text></svg>" }],
+    },
+    watch: {
+        color: function (c) {
+            this.socket.emit('color-change', c)
+        },
+    },
+    beforeMount () {
+        // this.socket.emit('join', { type: 'normie' }, function (data) {
+        //   this.world = data
+        // })
 
-        // draw other players
-        for (let i = 0; i < this.world.length; i++) {
-          if (this.socket.id === this.world[i].id) {
-            continue;
-          }
+        this.socket.on('world-update', (world) => {
+            this.world = world
+        })
+        this.socket.on('move-you', (location) => {
+            this.x = location[0]
+            this.y = location[1]
+            this.socket.emit('send-move', [this.x, this.y])
+        })
+        this.socket.emit('send-move', [this.x, this.y])
+    },
+    setup() {
+        const [deathSound] = useSound(scare)
 
-          if (this.world[i].type === 'beast') {
-            if (this.world[i].isClenched) {
-              p5.noStroke()
-              p5.fill("#3B9B19")
-              p5.ellipse(this.world[i].location[0] * tileWidth, this.world[i].location[1] * tileHeight,  tileWidth * 0.8);
-            } else {
-              p5.noFill()
-              p5.stroke("#3B9B19")
-              p5.strokeWeight(tileWidth*0.2)
-              p5.ellipse(this.world[i].location[0] * tileWidth, this.world[i].location[1] * tileHeight,  tileWidth);
+        return {
+            deathSound,
+        }
+    },
+    mounted() {
+
+        let sketch = function (p5) {
+            p5.setup = _ => {
+                p5.createCanvas(canvasSize, canvasSize);
+                p5.ellipse(p5.width / 2, p5.height / 2, 500, 500);
             }
-          } else if (this.world[i].type === 'normie') {
+            p5.draw = _ => {
+                p5.background(0);
+                // p5.push();
+                // p5.translate(-this.x * tileWidth + p5.width/2, -this.y * tileWidth + p5.height/2);
+                p5.translate((this.x - this.x % 9) * tileWidth * -1, (this.y - this.y % 9) * tileWidth * -1);
+                // p5.ellipse(posX, y, 50, 50);
+                // p5.pop();
+                // posX += this.speed;
+
+                // if (posX > p5.width || posX < 0) {
+                //   this.speed *= -1;
+                // }
+
+
+                // draw static world
+                p5.fill("#666")
+                p5.rectMode(p5.RADIUS)
+                for (let y = 0; y < world.length; y++) {
+                    for (let x = 0; x < world[0].length; x++) {
+                        if(mapAtLocation(x, y).name === 'wall') {
+                            p5.rect(x * tileWidth, y * tileHeight, tileWidth/2 + 1, tileHeight/2 + 1)
+                        }
+                    }
+                }
+
+                // draw other players
+                for (let i = 0; i < this.world.length; i++) {
+                    if (this.socket.id === this.world[i].id) {
+                        continue;
+                    }
+
+                    if (this.world[i].type === 'beast') {
+                        if (this.world[i].isClenched) {
+                            p5.noStroke()
+                            p5.fill("#3B9B19")
+                            p5.ellipse(this.world[i].location[0] * tileWidth, this.world[i].location[1] * tileHeight,  tileWidth * 0.8);
+                        } else {
+                            p5.noFill()
+                            p5.stroke("#3B9B19")
+                            p5.strokeWeight(tileWidth*0.2)
+                            p5.ellipse(this.world[i].location[0] * tileWidth, this.world[i].location[1] * tileHeight,  tileWidth);
+                        }
+                    } else if (this.world[i].type === 'normie') {
             p5.noStroke()
-            p5.fill("white")
+            p5.fill(this.world[i].color)
             p5.ellipse(this.world[i].location[0] * tileWidth, this.world[i].location[1] * tileHeight,  tileWidth * (this.world[i].isClenched ? 0.9 : 1));
           }
 
@@ -196,9 +208,9 @@ export default {
           }
         }
 
-        // draw players
+        // draw yourself
         p5.noStroke()
-        p5.fill("white")
+        p5.fill(this.color)
         p5.ellipse(this.x * tileWidth, this.y * tileHeight, tileWidth * (this.isClenched ? 0.9 : 1));
       }
     }
@@ -208,6 +220,10 @@ export default {
     new P5(sketch);
   },
   methods: {
+
+    playerAtLocation(x, y) {
+        return this.world.find((p) => p.id !== this.socket.id && p.location[0] === x && p.location[1] === y) || false
+    },
     btnPress() {
       this.clenchStart()
     },
@@ -273,8 +289,21 @@ export default {
         targetY = world.length - 1;
       }
 
-      if (thingAtLocation(targetX, targetY).solid) {
+      if (mapAtLocation(targetX, targetY).solid) {
         return false
+      }
+
+      const playerInSpot = this.playerAtLocation(targetX, targetY)
+
+      if (playerInSpot) {
+        let pushTargetX = targetX + dir[0]
+        let pushTargetY = targetY + dir[1]
+
+        if (!mapAtLocation(pushTargetX, pushTargetY).solid) {
+          this.socket.emit('send-push', { who: playerInSpot.id, location: [pushTargetX, pushTargetY] })
+        } else {
+          return false
+        }
       }
 
       this.x = targetX
