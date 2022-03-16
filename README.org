@@ -1,3 +1,5 @@
-* TO PLAY
-the game is hosted here
-http://quest.emu.media
+A codebase to host jackbox-style multiplayer games,
+where a moderator can create rooms and players can join
+
+(Ethan hasn't written a readme yet
+but he intends to)

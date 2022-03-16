@@ -6,7 +6,7 @@ export default {
 
   server: {
     host: '0.0.0.0',
-    port: 8002,
+    port: 8008,
   },
 
   serverMiddleware: [
