@@ -107,6 +107,15 @@ export default function(socketInstance) {
       socketInstance.in(player.party).emit('party-update', list)
     })
 
+    socket.on('party-set-nickname', function (nickname) {
+      console.log(nickname)
+      const player = getPlayer(socket.id)
+      player.nickname = nickname
+      const list = getPlayersOfParty(player.party)
+      console.log(list)
+      socketInstance.in(player.party).emit('party-update', list)
+    })
+
     socket.on('disconnect', function (fn) {
       const deletedPlayer = deletePlayer(socket.id)
 

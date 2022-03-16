@@ -1,11 +1,19 @@
 <template>
 <main class="main main--home">
+  <strong>you are on the secret /mod page</strong>
   
   <div class="join-chunk">
-    [list of open parties]
+    <h2>Open Parties</h2>
+
+    <div v-if="parties.length < 1">there are no active parties</div>
+    <ul class="list-of-parties">
+      <li v-for="party in parties">
+        <NuxtLink :to="`/party/${party.id}`">{{party.id}}</NuxtLink>, {{party.memberCount}} members
+      </li>
+    </ul>
   </div>
 
-    <!-- Nothing is happening here right now. -->
+  <!-- Nothing is happening here right now. -->
   <!--   <form @submit.prevent="joinParty" class="input-and-button"> -->
   <!--     <label> -->
   <!--       <span class="input-label">Party Code</span> -->
@@ -20,7 +28,7 @@
         <label>
           Game
           <select v-model="selectedGame" required>
-            <option value="poem-1">Poem 1</option>
+            <option value="poem">Poem</option>
             <!-- <option value="masks">Masks</option> -->
             <!-- <option value="quest">Quest</option> -->
           </select>
@@ -38,14 +46,24 @@ export default {
       hostParty: {},
       hostPartyTicket: '',
       partyCode: '',
-      selectedGame: 'poem-1',
+      selectedGame: 'poem',
+      parties: [],
     }
   },
   
   mounted() {
     this.hostPartyTicket = Math.floor(Math.random() * 1000000)
   },
-  
+
+  async fetch() {
+    this.parties = await fetch('/api/party', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(res => res.json())
+  },
+
   methods: {
     async createParty() {
         const data = {
@@ -62,7 +80,7 @@ export default {
       })
       
       const responseJSON = await response.json()
-      
+
       this.$router.push({
         name: 'party-party',
         params: {

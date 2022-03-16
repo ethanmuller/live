@@ -5,5 +5,4 @@ The idea is to make multiplayer games where large numbers of players can join. I
 don't know what the upper limit of concurrent players is, so please tell me if
 you find out.
 
-(Ethan hasn't written a proper readme yet
-but he intends to)
+The UI is built in [Vue](https://vuejs.org/), using the [NuxtJS](https://nuxtjs.org/) framework
