@@ -40,14 +40,19 @@ function getParty(id) {
 
 function endParty(id) {
   const party = partyList.find((p) => id === p.id)
-
-  if (!party) {
-    return false
-  }
-
+  const partyIndex = partyList.indexOf(party)
   console.log('ending party', party)
 
-  party.isEnded = true
+  partyList.splice(partyIndex, 1)
+  // if (!party) {
+  //   return false
+  // }
+
+
+  // party.isEnded = true
+
+  // partyList = partyList.filter((p) => id !== p.id)
+
   return true
 }
 

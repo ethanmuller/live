@@ -1,0 +1,92 @@
+<template>
+<div>
+  <div v-if="isConnected">
+    <div style="padding: 1.5rem;">
+      <div style="margin-bottom: 1.5rem;">
+        <p v-if="people.length === 1" style="opacity: 0.2">You are here by yourself.</p>
+        <p v-else-if="people.length === 2">There's 1 other person here.</p>
+        <p v-else-if="people.length > 2">There's {{ people.length - 1 }} other people here.</p>
+      </div>
+      <!-- <div class="party-header">Party Code: <strong>{{ this.partyRoom.id.toUpperCase() }}</strong></div> -->
+      <div v-if="!identitySet">
+        <form>
+          <label for="name-entry" class="text-label">What are you called?</label>
+          <div class="name-entry">
+            <input type="text" v-model="nickname" required id="name-entry">
+            <button @click="saveNickname" class="btn btn--primary">Save</button>
+          </div>
+          <!-- <button @click="resetNickname" class="btn">Cancel</button> -->
+        </form>
+      </div>
+      <main v-if="identitySet">
+        <div class="party-chunk">
+          <ul class="party-list">
+            <li v-for="member in people">
+              <button class="party-list__item" @click="editIdentity" v-if="member.id === socket.id">
+                <!-- this is a button that renders the current user -->
+                <!-- separately from the party they are in -->
+                {{ member.nickname }} <span class="emoji-icon">✏️</span>
+              </button>
+              <span v-else class="party-list__item" v-text="member.nickname || '...'">...</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="host-note" style="margin-top: 1.5rem"><button @click="endPartyButton()" class="btn btn--danger">End Party</button></div>
+
+    </main>
+    </div>
+  </div>
+
+  <slot></slot>
+
+  <div v-if="!isConnected">trying to connect...</div>
+</div>
+</template>
+
+<script>
+export default {
+  props: ['socket', 'party', 'isConnected', 'partyRoom', 'people', 'endParty'],
+
+  data() {
+    return {
+      identitySet: false,
+      socketId: null,
+      count: 0,
+      nickname: this.$store.state.identity.nickname,
+    }
+  },
+
+  methods: {
+    saveNickname() {
+      if (this.nickname === '') {
+        alert('Please enter a nickname to continue')
+        return
+      }
+
+      this.identitySet = true
+
+      // tell other party members
+      this.socket.emit('party-set-nickname', this.nickname, this.$store.state.identity.nickname)
+
+      // save in local storage
+      this.$store.commit('identity/setNickname', this.nickname)
+    },
+
+    resetNickname() {
+      this.identitySet = true
+      this.nickname = this.$store.state.identity.nickname;
+    },
+    editIdentity() {
+      this.identitySet = false
+    },
+    endPartyButton() {
+        if (confirm(`This will kick everybody out of the party. You're sure you want to do this?`)) {
+        this.socket.emit('party-end')
+        this.endParty()
+      }
+    },
+  }
+}
+</script>
+

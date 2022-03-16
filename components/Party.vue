@@ -20,6 +20,7 @@ export default {
       gamesMap: {
         quest: 'GamesQuest',
         masks: 'GamesMasks',
+        poem: 'GamesPoem',
       },
     }
   },
@@ -39,7 +40,9 @@ export default {
       if(res.ok) {
         return await res.json()
       } else {
-        throw new Error(res.status)
+        if (res.status === 404) {
+          this.$router.push({ path: '/' })
+        }
       }
     })
   },

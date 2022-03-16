@@ -9,11 +9,8 @@
 export default {
   head() {
     return {
-      title: `AIN'T NO PARTY LIKE A ${this.$route.params.party.toUpperCase()} PARTY`
+      title: `Party Code: ${this.$route.params.party.toUpperCase()}`
     }
-  },
-  
-  mounted() {
   },
 }
 </script>
