@@ -19,6 +19,8 @@ input[type="text"] {
 }
 
 .btn {
+    font-family: inherit;
+    font-weight: normal;
     font-size: 18px;
     color: black;
     background: #D1D1D1;

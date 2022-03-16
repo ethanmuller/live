@@ -2,17 +2,33 @@
 <main class="main main--home">
   
   <div class="join-chunk">
-    <!-- Nothing is happening here right now. -->
-    <form @submit.prevent="joinParty" class="input-and-button">
-      <label>
-        <span class="input-label">Party Code</span>
-        <input type="text" v-model="partyCode">
-        <span class="hint" v-if="partyCode.length > 4">Code should be no more than 4 characters</span>
-      </label>
-      <button class="btn btn--primary join-button" :disabled="partyCode.length !== 4">Join</button>
-    </form>
+    [list of open parties]
   </div>
-</main>
+
+    <!-- Nothing is happening here right now. -->
+  <!--   <form @submit.prevent="joinParty" class="input-and-button"> -->
+  <!--     <label> -->
+  <!--       <span class="input-label">Party Code</span> -->
+  <!--       <input type="text" v-model="partyCode"> -->
+  <!--       <span class="hint" v-if="partyCode.length > 4">Code should be no more than 4 characters</span> -->
+  <!--     </label> -->
+  <!--     <button class="btn btn--primary join-button" :disabled="partyCode.length !== 4">Join</button> -->
+  <!--   </form> -->
+
+    <div class="host-note">
+      <form @submit.prevent="createParty">
+        <label>
+          Game
+          <select v-model="selectedGame" required>
+            <option value="poem-1">Poem 1</option>
+            <!-- <option value="masks">Masks</option> -->
+            <!-- <option value="quest">Quest</option> -->
+          </select>
+        </label>
+        <button class="btn btn--sm">Create Party</button>
+      </form>
+    </div>
+  </main>
 </template>
 
 <script>
@@ -22,7 +38,7 @@ export default {
       hostParty: {},
       hostPartyTicket: '',
       partyCode: '',
-      selectedGame: '',
+      selectedGame: 'poem-1',
     }
   },
   
