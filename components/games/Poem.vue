@@ -1,38 +1,44 @@
 <template>
 <div>
+  <div style="padding: 1.5rem;">
+    <canvas ref="canvas"></canvas>
+  </div>
   <div v-if="isConnected">
     <div style="padding: 1.5rem;">
+      <div v-if="url.indexOf('localhost') > -1">warning: QR Code is pointing to "localhost"</div>
       <div style="margin-bottom: 1.5rem;">
         <p v-if="people.length === 1" style="opacity: 0.2">You are here by yourself.</p>
         <p v-else-if="people.length === 2">There's 1 other person here.</p>
         <p v-else-if="people.length > 2">There's {{ people.length - 1 }} other people here.</p>
       </div>
       <!-- <div class="party-header">Party Code: <strong>{{ this.partyRoom.id.toUpperCase() }}</strong></div> -->
-      <div v-if="!identitySet">
-        <form>
-          <label for="name-entry" class="text-label">What are you called?</label>
-          <div class="name-entry">
-            <input type="text" v-model="nickname" required id="name-entry">
-            <button @click="saveNickname" class="btn btn--primary">Save</button>
-          </div>
-          <!-- <button @click="resetNickname" class="btn">Cancel</button> -->
-        </form>
-      </div>
-      <main v-if="identitySet">
-        <div class="party-chunk">
-          <ul class="party-list">
-            <li v-for="member in people">
-              <button class="party-list__item" @click="editIdentity" v-if="member.id === socket.id">
-                <!-- this is a button that renders the current user -->
-                <!-- separately from the party they are in -->
-                {{ member.nickname }} <span class="emoji-icon">✏️</span>
-              </button>
-              <span v-else class="party-list__item" v-text="member.nickname || '...'">...</span>
-            </li>
-          </ul>
+      <div v-if="this.$route.query.role !== 'screen'">
+        <div v-if="!identitySet">
+          <form>
+            <label for="name-entry" class="text-label">What are you called?</label>
+            <div class="name-entry">
+              <input type="text" v-model="nickname" required id="name-entry">
+              <button @click="saveNickname" class="btn btn--primary">Save</button>
+            </div>
+            <!-- <button @click="resetNickname" class="btn">Cancel</button> -->
+          </form>
         </div>
+        <main v-if="identitySet">
+          <div class="party-chunk">
+            <ul class="party-list">
+              <li v-for="member in people">
+                <button class="party-list__item" @click="editIdentity" v-if="member.id === socket.id">
+                  <!-- this is a button that renders the current user -->
+                  <!-- separately from the party they are in -->
+                  {{ member.nickname }} <span class="emoji-icon">✏️</span>
+                </button>
+                <span v-else class="party-list__item" v-text="member.nickname || '...'">...</span>
+              </li>
+            </ul>
+          </div>
 
-    </main>
+        </main>
+      </div>
 
     <div class="host-note" style="margin-top: 1.5rem"><button @click="endPartyButton()" class="btn btn--danger" v-if="this.$route.query.role === 'mod'">End Party</button></div>
     </div>
@@ -45,6 +51,8 @@
 </template>
 
 <script>
+const QRCode = require('qrcode')
+
 export default {
   props: ['socket', 'party', 'isConnected', 'partyRoom', 'people', 'endParty'],
 
@@ -54,7 +62,27 @@ export default {
       socketId: null,
       count: 0,
       nickname: this.$store.state.identity.nickname,
+      url: '',
     }
+  },
+
+  mounted() {
+    this.url = window.location.protocol + '//' + window.location.host + window.location.pathname;
+
+    const canvas = this.$refs.canvas;
+
+    QRCode.toCanvas(canvas, this.url, {
+  scale: 4,
+      margin: 0,
+  color: {
+    dark: '#000',  // Blue dots
+    light: '#0000' // Transparent background
+  }
+}, function (error) {
+      if (error) console.error(error)
+      console.log('success!');
+    })
+
   },
 
   methods: {

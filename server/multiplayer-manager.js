@@ -39,9 +39,10 @@ function getPlayersOfParty(party) {
   return players.filter(player => player.party === party.toLowerCase())
 }
 
-function addPlayer(socket, partyCode) {
+function addPlayer(socket, partyCode, type) {
   const player = {
     id: socket.id,
+    type,
     party: partyCode.toLowerCase(),
   }
 
@@ -80,10 +81,10 @@ export default function(socketInstance) {
   socketInstance.on('connection', (socket) => {
 
     socket.on('party-join', function (data) {
-      const player = addPlayer(socket, data.party)
+      const player = addPlayer(socket, data.party, data.type)
       const list = getPlayersOfParty(data.party)
-
       console.log(`party-join in ${data.party}`, list)
+
       socketInstance.in(player.party).emit('party-update', list)
     })
 
@@ -93,7 +94,7 @@ export default function(socketInstance) {
       socket.in(party).emit('party-end')
     })
 
-    socket.on('party-set-name', function (nickname) {
+    socket.on('party-set-name', function (nickname, oldname) {
       const player = getPlayer(socket.id)
       player.nickname = nickname
       const list = getPlayersOfParty(player.party)

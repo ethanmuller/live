@@ -41,7 +41,7 @@ export default {
         return await res.json()
       } else {
         if (res.status === 404) {
-          this.$router.push({ path: '/' })
+          this.$router.push({ path: '/', query: this.$route.query })
         }
       }
     })
@@ -73,10 +73,14 @@ export default {
       this.$router.push({ path: '/', query: this.$route.query })
     },
     handleConnect() {
-      console.log('connect')
       this.isConnected = true
 
-      socket.emit('party-join', { party: this.$route.params.party })
+      socket.emit('party-join', { party: this.$route.params.party, type: this.$route.query.role || 'player' })
+
+      if (this.$route.query.role === 'screen') {
+        this.socket.emit('party-set-nickname', 'screen')
+      }
+
     },
     receivePartyUpdate(updatedParty) {
       this.people = updatedParty
