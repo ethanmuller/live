@@ -6,6 +6,7 @@
       <Dpad @dpadRelease="dpadRelease" @dpadPress="dpadPress"></Dpad>
       <input type="color" v-model="color">
     </div>
+    <div class="host-note" style="margin-top: 1.5rem"><button @click="endPartyButton()" class="btn btn--danger" v-if="this.$route.query.role === 'mod'">End Party</button></div>
     <div v-if="dead" class="game-over-screen">
       <div>
         YOU HAVE BEEN<br>EATEN BY THE BEAST
@@ -84,7 +85,7 @@ function mapAtLocation(x, y) {
 }
 
 export default {
-    props: ['socket', 'party'],
+    props: ['socket', 'party', 'endParty'],
 
     async fetch () {
         const self = this
@@ -325,6 +326,12 @@ export default {
       this.messages.push(message)
       this.message = ''
       this.socket.emit('send-message', message)
+    },
+    endPartyButton() {
+        if (confirm(`This will kick everybody out of the party. You're sure you want to do this?`)) {
+        this.socket.emit('party-end')
+        this.endParty()
+      }
     },
   }
 }

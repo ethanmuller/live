@@ -32,9 +32,9 @@
           </ul>
         </div>
 
-        <div class="host-note" style="margin-top: 1.5rem"><button @click="endPartyButton()" class="btn btn--danger">End Party</button></div>
-
     </main>
+
+    <div class="host-note" style="margin-top: 1.5rem"><button @click="endPartyButton()" class="btn btn--danger" v-if="this.$route.query.role === 'mod'">End Party</button></div>
     </div>
   </div>
 

@@ -424,6 +424,11 @@ export default {
   },
 
   unmounted() {
+    this.$refs.dpad.removeEventListener('touchstart', this.handleDpadPressPointerEvent)
+    this.$refs.dpad.removeEventListener('mousedown', this.handleDpadPressPointerEvent)
+    this.$refs.dpad.removeEventListener('touchend', this.dpadRelease)
+    this.$refs.dpad.removeEventListener('mouseup', this.dpadRelease)
+
     document.body.removeEventListener('keydown', this.handleDpadKeydownEvent)
     document.body.removeEventListener('keyup', this.dpadRelease)
   },

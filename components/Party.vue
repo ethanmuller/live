@@ -70,7 +70,7 @@ export default {
       this.endParty()
     },
     endParty() {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/', query: this.$route.query })
     },
     handleConnect() {
       console.log('connect')

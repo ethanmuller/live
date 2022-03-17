@@ -8,7 +8,7 @@
     <div v-if="parties.length < 1">there are no active parties</div>
     <ul class="list-of-parties">
       <li v-for="party in parties">
-        <NuxtLink :to="`/party/${party.id}`">{{party.id}}</NuxtLink>, {{party.memberCount}} members
+        <NuxtLink :to="{ path: `/party/${party.id}`, query: { role: 'mod' } }">{{party.id}}</NuxtLink>, {{party.memberCount}} members
       </li>
     </ul>
   </div>
@@ -30,7 +30,7 @@
           <select v-model="selectedGame" required>
             <option value="poem">Poem</option>
             <!-- <option value="masks">Masks</option> -->
-            <!-- <option value="quest">Quest</option> -->
+            <option value="quest">Quest</option>
           </select>
         </label>
         <button class="btn btn--sm">Create Party</button>
@@ -81,6 +81,7 @@ export default {
       
       const responseJSON = await response.json()
 
+      // this directs the user to the newly created party
       this.$router.push({
         name: 'party-party',
         params: {
@@ -88,8 +89,11 @@ export default {
           role: 'host',
           ticket: this.hostPartyTicket,
         },
+        query: {
+          role: 'mod',
+        },
       })
-      // $router.push({name: 'next-page', params: {foo: 1}})
+      $router.push({name: 'next-page', params: {foo: 1}})
     },
     joinParty() {
       this.$router.push({

@@ -7,11 +7,24 @@
       active parties:
       <ul class="list-of-parties">
         <li v-for="party in parties">
-          <NuxtLink :to="`/party/${party.id}`">{{party.id}}</NuxtLink>, {{party.memberCount}} members
+          <NuxtLink :to="{ path: `/party/${party.id}`, query: $route.query }">{{party.id}}</NuxtLink>, {{party.memberCount}} members
         </li>
       </ul>
     </div>
   </div>
+  <div class="host-note" v-if="$route.query.role === 'mod'">
+    <form @submit.prevent="createParty">
+      <label>
+        Game
+        <select v-model="selectedGame" required>
+          <option value="poem">Poem</option>
+          <!-- <option value="masks">Masks</option> -->
+          <option value="quest">Quest</option>
+          </select>
+        </label>
+        <button class="btn btn--sm">Create Party</button>
+      </form>
+    </div>
 </main>
 </template>
 
@@ -22,7 +35,7 @@ export default {
       hostParty: {},
       hostPartyTicket: '',
       partyCode: '',
-      selectedGame: '',
+      selectedGame: 'poem',
       parties: [],
     }
   },
@@ -39,7 +52,12 @@ export default {
         },
       }).then(res => res.json())
 
-    console.log(this.parties.length)
+    if (this.parties.length === 1 && this.$route.query.role !== 'mod') {
+      this.$router.push({
+        path: `/party/${this.parties[0].id}`,
+        query: this.$route.query,
+      })
+    }
   },
 
   methods: {
@@ -65,6 +83,9 @@ export default {
           party: responseJSON.id,
           role: 'host',
           ticket: this.hostPartyTicket,
+        },
+        query: {
+          role: 'mod',
         },
       })
       // $router.push({name: 'next-page', params: {foo: 1}})
