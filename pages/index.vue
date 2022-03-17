@@ -2,7 +2,7 @@
 <main class="main main--home">
   
   <div class="join-chunk">
-    <div v-if="parties.length < 1">Nothing is happening here right now.</div>
+    <div v-if="parties.length < 1" style="padding: 1.5rem;"">Nothing is happening here right now. Please try refreshing your browser.</div>
     <div v-else>
       active parties:
       <ul class="list-of-parties">

@@ -2,10 +2,10 @@
 <div>
   <div style="padding: 1.5rem;">
     <canvas ref="canvas"></canvas>
+    <div v-if="url.indexOf('localhost') > -1">warning: QR Code is pointing to "localhost"</div>
   </div>
   <div v-if="isConnected">
     <div style="padding: 1.5rem;">
-      <div v-if="url.indexOf('localhost') > -1">warning: QR Code is pointing to "localhost"</div>
       <div style="margin-bottom: 1.5rem;">
         <p v-if="people.length === 1" style="opacity: 0.2">You are here by yourself.</p>
         <p v-else-if="people.length === 2">There's 1 other person here.</p>
