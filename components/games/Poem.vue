@@ -109,7 +109,7 @@ export default {
       this.identitySet = false
     },
     endPartyButton() {
-        if (confirm(`This will kick everybody out of the party. You're sure you want to do this?`)) {
+        if (this.people.length < 2 || confirm(`This will kick everybody out of the party. You're sure you want to do this?`)) {
         this.socket.emit('party-end')
         this.endParty()
       }
