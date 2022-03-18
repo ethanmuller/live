@@ -1,10 +1,11 @@
 <template>
 <div>
-  <div style="padding: 1.5rem;">
+  <div v-show="isScreen" style="position: absolute; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0)">
     <canvas ref="canvas"></canvas>
-    <div v-if="url.indexOf('localhost') > -1">warning: QR Code is pointing to "localhost"</div>
+    <div v-if="url.indexOf('localhost') > -1"><strong>warning: QR Code is pointing to "localhost"</strong></div>
   </div>
-  <div v-if="isConnected">
+  <div v-if="isConnected && !isScreen">
+    <NuxtLink :to="{ path: '/', query: this.$route.query }" v-if="isMod" style="padding: 0.5rem; display: inline-block;">&lt;- Party Index</NuxtLink>
     <div style="padding: 1.5rem;">
       <div style="margin-bottom: 1.5rem;">
         <p v-if="people.length === 1" style="opacity: 0.2">You are here by yourself.</p>
@@ -12,7 +13,7 @@
         <p v-else-if="people.length > 2">There's {{ people.length - 1 }} other people here.</p>
       </div>
       <!-- <div class="party-header">Party Code: <strong>{{ this.partyRoom.id.toUpperCase() }}</strong></div> -->
-      <div v-if="this.$route.query.role !== 'screen'">
+      <div v-if="!isScreen">
         <div v-if="!identitySet">
           <form>
             <label for="name-entry" class="text-label">What are you called?</label>
@@ -40,7 +41,7 @@
         </main>
       </div>
 
-    <div class="host-note" style="margin-top: 1.5rem"><button @click="endPartyButton()" class="btn btn--danger" v-if="this.$route.query.role === 'mod'">End Party</button></div>
+    <div class="host-note" style="margin-top: 1.5rem"><button @click="endPartyButton()" class="btn btn--danger" v-if="isMod">End Party</button></div>
     </div>
   </div>
 
@@ -51,38 +52,46 @@
 </template>
 
 <script>
-const QRCode = require('qrcode')
+const QRCode = require('qrcode');
+
 
 export default {
-  props: ['socket', 'party', 'isConnected', 'partyRoom', 'people', 'endParty'],
+    props: ['socket', 'party', 'isConnected', 'partyRoom', 'people', 'endParty'],
 
-  data() {
-    return {
-      identitySet: false,
-      socketId: null,
-      count: 0,
-      nickname: this.$store.state.identity.nickname,
-      url: '',
-    }
-  },
+    data() {
+        return {
+            identitySet: false,
+            socketId: null,
+            count: 0,
+            nickname: this.$store.state.identity.nickname,
+            url: '',
+            isScreen: this.$route.query.role === 'screen',
+            isMod: this.$route.query.role === 'mod',
+        }
+    },
 
-  mounted() {
-    this.url = window.location.protocol + '//' + window.location.host + window.location.pathname;
+    mounted() {
+        if (this.nickname) {
+            this.saveNickname()
+        }
 
-    const canvas = this.$refs.canvas;
+        if (this.isScreen) {
+            this.url = window.location.protocol + '//' + window.location.host + window.location.pathname;
 
-    QRCode.toCanvas(canvas, this.url, {
-  scale: 4,
-      margin: 0,
-  color: {
-    dark: '#000',  // Blue dots
-    light: '#0000' // Transparent background
-  }
-}, function (error) {
-      if (error) console.error(error)
-      console.log('success!');
-    })
+            const canvas = this.$refs.canvas;
 
+            QRCode.toCanvas(canvas, this.url, {
+                scale: 8,
+                margin: 0,
+                color: {
+                    dark: '#000',  // Blue dots
+                    light: '#0000' // Transparent background
+                }
+            }, function (error) {
+                if (error) console.error(error)
+                console.log('success!');
+            })
+        }
   },
 
   methods: {
