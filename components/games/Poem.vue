@@ -56,42 +56,45 @@ const QRCode = require('qrcode');
 
 
 export default {
-    props: ['socket', 'party', 'isConnected', 'partyRoom', 'people', 'endParty'],
+  props: ['socket', 'party', 'isConnected', 'partyRoom', 'people', 'endParty'],
 
-    data() {
-        return {
-            identitySet: false,
-            socketId: null,
-            count: 0,
-            nickname: this.$store.state.identity.nickname,
-            url: '',
-            isScreen: this.$route.query.role === 'screen',
-            isMod: this.$route.query.role === 'mod',
+  data() {
+    return {
+      identitySet: false,
+      socketId: null,
+      count: 0,
+      nickname: this.$store.state.identity.nickname,
+      url: '',
+      isScreen: this.$route.query.role === 'screen',
+      isMod: this.$route.query.role === 'mod',
+    }
+  },
+
+  mounted() {
+
+    if (this.isScreen) {
+      this.url = window.location.protocol + '//' + window.location.host + window.location.pathname;
+
+      this.nickname = 'screen';
+
+      const canvas = this.$refs.canvas;
+
+      QRCode.toCanvas(canvas, this.url, {
+        scale: 8,
+        margin: 0,
+        color: {
+          dark: '#000',  // Blue dots
+          light: '#0000' // Transparent background
         }
-    },
+      }, function (error) {
+        if (error) console.error(error)
+        console.log('success!');
+      })
+    }
 
-    mounted() {
-        if (this.nickname) {
-            this.saveNickname()
-        }
-
-        if (this.isScreen) {
-            this.url = window.location.protocol + '//' + window.location.host + window.location.pathname;
-
-            const canvas = this.$refs.canvas;
-
-            QRCode.toCanvas(canvas, this.url, {
-                scale: 8,
-                margin: 0,
-                color: {
-                    dark: '#000',  // Blue dots
-                    light: '#0000' // Transparent background
-                }
-            }, function (error) {
-                if (error) console.error(error)
-                console.log('success!');
-            })
-        }
+    if (this.nickname) {
+      this.saveNickname()
+    }
   },
 
   methods: {
