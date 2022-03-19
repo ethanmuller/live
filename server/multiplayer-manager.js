@@ -94,13 +94,6 @@ export default function(socketInstance) {
       socket.in(party).emit('party-end')
     })
 
-    socket.on('party-set-name', function (nickname, oldname) {
-      const player = getPlayer(socket.id)
-      player.nickname = nickname
-      const list = getPlayersOfParty(player.party)
-      socketInstance.in(player.party).emit('party-update', list)
-    })
-
     socket.on('party-set-avatar-url', function (url) {
       const player = getPlayer(socket.id)
       player.avatarUrl = url
@@ -110,7 +103,13 @@ export default function(socketInstance) {
 
     socket.on('party-set-nickname', function (nickname) {
       console.log(nickname)
+
       const player = getPlayer(socket.id)
+
+      if (!player) {
+        return
+      }
+
       player.nickname = nickname
       const list = getPlayersOfParty(player.party)
       console.log(list)
