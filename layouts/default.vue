@@ -5,6 +5,8 @@
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
+
 html {
   font-family:
     'Source Sans Pro',
@@ -58,5 +60,19 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+
+#poemcontainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 36px;
+}
+
+#poemcontainer p {
+  
 }
 </style>

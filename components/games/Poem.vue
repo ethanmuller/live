@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div v-show="isScreen" style="position: absolute; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0)">
+  <div v-show="isScreen" style="position: absolute; top: 50%; right: 0px; transform: translate3d(0, -50%, 0)">
     <canvas ref="canvas"></canvas>
     <div v-if="url.indexOf('localhost') > -1"><strong>warning: QR Code is pointing to "localhost"</strong></div>
   </div>
@@ -43,6 +43,29 @@
 
     <div class="host-note" style="margin-top: 1.5rem"><button @click="endPartyButton()" class="btn btn--danger" v-if="isMod">End Party</button></div>
     </div>
+  </div>
+
+  <div v-if="isConnected" id="poemcontainer">
+    <p>長頭髮的＿住在＿＿裡</p>
+    <p>討厭＿＿裡強壯的＿＿</p>
+    <p>笑起來像＿＿</p>
+    <p>忘記的時候像＿＿的＿＿</p>
+    <p></p>
+    <p>有一天＿被＿＿了</p>
+    <p>＿們不知道明天會有什麼＿＿</p>
+    <p>＿在＿＿裡等待著＿＿出現</p>
+    <p>途中＿＿死了＿次</p>
+    <p></p>
+    <p>幸好還有＿＿</p>
+    <p>＿帶著＿＿和＿＿</p>
+    <p>用時間和＿＿</p>
+    <p>尋回了＿＿＿＿的＿＿</p>
+    <p></p>
+    <p>那天以後</p>
+    <p>一切都＿＿＿＿</p>
+    <p>可是永遠有人記得那個＿月</p>
+    <p>非常非常地冷</p>
+    <p></p>
   </div>
 
   <slot></slot>
