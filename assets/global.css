@@ -66,6 +66,13 @@ input[type="text"] {
     color: white;
 }
 
+.btn--mod {
+    font-weight: bold;
+    background: transparent;
+    color: inherit;
+    border: 3px solid;
+}
+
 .btn--sm {
     font-size: 14px;
 }
@@ -136,11 +143,6 @@ input[type="text"] {
   align-items: center;
 }
 
-.main--home {
-  min-height: calc(100vh - 5rem);
-  justify-content: center;
-}
-
 .main--game {
   justify-content: flex-start;
 }
@@ -199,4 +201,17 @@ input {
   max-width: 13em;
   display: inline-block;
   font-size: 0.7rem;
+}
+
+.mod-panel {
+  background: #00f;
+  color: white;
+  width: 100%;
+  padding: 1.5rem;
+}
+.mod-panel__title {
+  margin-bottom: 1.5rem;
+  display: block;
+  font-weight: bold;
+  letter-spacing: 0.05rem;
 }

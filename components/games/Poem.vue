@@ -1,5 +1,9 @@
 <template>
-  <main class="main main--home">
+  <main class="main">
+
+uh: {{isConnected}}
+    <NuxtLink :to="{ path: '/', query: this.$route.query }" v-if="isMod" style="padding: 0.5rem; display: inline-block;">&lt;- Party Index</NuxtLink>
+
     <div id="poemcontainer">
       <p>The
         <WordSelector type='adjective' :wordList='wordList' />
@@ -14,22 +18,27 @@
         <WordSelector type='verb' :wordList='wordList' />
         <WordSelector type='adverbly' :wordList='wordList' /></p>
     </div>
+
+    <div class="mod-panel" v-if="isMod">
+      <span class="mod-panel__title">Mod Panel</span>
+      <div class="host-note"><button @click="endPartyButton()" class="btn btn--mod">End Party</button></div>
+    </div>
   </main>
 </template>
 
 <script>
 import socket from '~/plugins/socket.io-client.js'
-console.log(socket)
 
 export default {
-  props: ['socket'],
   data() {
     return {
+      isConnected: false,
       hostParty: {},
       hostPartyTicket: '',
       partyCode: '',
       selectedGame: 'poem',
       parties: [],
+      isMod: this.$route.query.role === 'mod',
       wordList: {
         'noun': {
           'fox': -1,
@@ -87,7 +96,6 @@ export default {
   
   mounted() {
     this.hostPartyTicket = Math.floor(Math.random() * 1000000)
-    console.log(this.wordList)
   },
 
   async fetch() {
@@ -106,13 +114,35 @@ export default {
     }
   },
 
+  mounted() {
+    console.log('hi')
+    socket.on('connect', this.handleConnect)
+    socket.on('disconnect', this.handleDisconnect)
+
+    socket.connect()
+    // socket.on('party-update', this.receivePartyUpdate)
+    // socket.on('party-end', this.receivePartyEnd)
+
+    // this.connect()
+  },
+
+  beforeDestroy() {
+    console.log('bye')
+    socket.disconnect()
+
+    socket.off('connect', this.handleConnect)
+    socket.off('disconnect', this.handleDisconnect)
+    // socket.off('party-update', this.receivePartyUpdate)
+    // socket.off('party-end', this.receivePartyEnd)
+  },
+
   methods: {
     async createParty() {
         const data = {
-            ticket: this.hostPartyTicket,
-            selectedGame: this.selectedGame,
+             ticket: this.hostPartyTicket,
+             selectedGame: this.selectedGame,
         }
-      
+
       const response = await fetch('/api/party', {
         method: 'POST',
         headers: {
@@ -120,9 +150,9 @@ export default {
         },
         body: JSON.stringify(data)
       })
-      
+
       const responseJSON = await response.json()
-      
+
       this.$router.push({
         name: 'party-party',
         params: {
@@ -136,6 +166,14 @@ export default {
       })
       // $router.push({name: 'next-page', params: {foo: 1}})
     },
+    handleConnect() {
+      this.isConnected = true
+
+      socket.emit('party-join', { party: this.$route.params.party, type: this.$route.query.role || 'player' })
+    },
+    handleDisconnect() {
+      this.isConnected = false
+    },
     joinParty() {
       this.$router.push({
         name: 'party-party',
@@ -144,7 +182,16 @@ export default {
           role: 'guest',
         },
       })
-    }
+    },
+    endParty() {
+      this.$router.push({ path: '/', query: this.$route.query })
+    },
+    endPartyButton() {
+        if (this.people?.length < 2 || confirm(`This will kick everybody out of the party. You're sure you want to do this?`)) {
+        socket.emit('party-end')
+        this.endParty()
+      }
+    },
   },
 }
 </script>

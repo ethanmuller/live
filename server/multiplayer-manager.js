@@ -89,9 +89,9 @@ export default function(socketInstance) {
     })
 
     socket.on('party-end', function () {
-      const party = getPlayer(socket.id).party
-      partyManager.endParty(party)
-      socket.in(party).emit('party-end')
+      // const party = getPlayer(socket.id).party
+      // partyManager.endParty(party)
+      // socket.in(party).emit('party-end')
     })
 
     socket.on('party-set-avatar-url', function (url) {

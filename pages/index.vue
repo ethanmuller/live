@@ -12,17 +12,10 @@
       </ul>
     </div>
   </div>
-  <div class="host-note" v-if="$route.query.role === 'mod'">
+  <div class="host-note mod-panel" v-if="$route.query.role === 'mod'">
+      <span class="mod-panel__title">Mod Panel</span>
     <form @submit.prevent="createParty">
-      <label>
-        Game
-        <select v-model="selectedGame" required>
-          <option value="poem">Poem</option>
-          <!-- <option value="masks">Masks</option> -->
-          <option value="quest">Quest</option>
-          </select>
-        </label>
-        <button class="btn btn--sm">Create Party</button>
+        <button class="btn btn--sm btn--mod">Create Party</button>
       </form>
     </div>
 </main>
