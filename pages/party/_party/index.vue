@@ -1,7 +1,6 @@
 <template>
 <div>
-  <Party>
-  </Party>
+  <GamesPoem />
 </div>
 </template>
 
