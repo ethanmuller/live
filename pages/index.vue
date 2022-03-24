@@ -7,7 +7,7 @@
       active parties:
       <ul class="list-of-parties">
         <li v-for="party in parties">
-          <NuxtLink :to="{ path: `/party/${party.id}`, query: $route.query }">{{party.id}}</NuxtLink>, {{party.memberCount}} members
+          <NuxtLink :to="{ path: `/party/${party.id}`, query: $route.query }">{{party.id}}</NuxtLink>
         </li>
       </ul>
     </div>
