@@ -69,7 +69,7 @@ html {
   transform: translate3d(-50%, -50%, 0);
 
   font-family: 'Noto Sans TC', sans-serif;
-  font-size: 36px;
+  font-size: 28px;
 }
 
 #poemcontainer p {
