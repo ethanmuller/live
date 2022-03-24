@@ -1,75 +1,7 @@
 import partyManager from './party-manager'
+import wordList from '../mad-lib.js'
 
-const players = []
 export let io = null;
-
-const world = {}
-
-function getMembersList(party, fn) {
-  io.fetchSockets()
-    .then((sox) => {
-      const members = []
-      sox.forEach((socket) => {
-        let member = world[socket.id]
-
-        if (member && member.party !== party) {
-          return
-        }
-
-        if (!member) {
-          member = {
-            id: socket.id,
-            location: [0, 0],
-            isClenched: false,
-          }
-        }
-
-        members.push(member)
-      })
-
-      fn(members)
-    })
-}
-
-function getPlayer(id) {
-  return players.find(player => player.id === id)
-}
-
-function getPlayersOfParty(party) {
-  return players.filter(player => player.party === party.toLowerCase())
-}
-
-function addPlayer(socket, partyCode, type) {
-  const player = {
-    id: socket.id,
-    type,
-    party: partyCode.toLowerCase(),
-  }
-
-  socket.join(player.party)
-
-  players.push(player)
-
-  const party = partyManager.partyList.find(p => player.party === p.id)
-  if (party) {
-    party.memberCount = party.memberCount + 1
-  }
-
-  return player
-}
-
-function deletePlayer(id) {
-  const index = players.findIndex((player) => player.id === id);
-  if (index !== -1) {
-
-    const party = partyManager.partyList.find(p => players[index].party === p.id)
-    if (party) {
-      party.memberCount = party.memberCount - 1
-    }
-
-    return players.splice(index, 1)[0]
-  }
-}
 
 export default function(socketInstance) {
   // This line feels incredibly flaky,
@@ -80,118 +12,24 @@ export default function(socketInstance) {
 
   socketInstance.on('connection', (socket) => {
 
-    socket.on('party-join', function (data) {
-      const player = addPlayer(socket, data.party, data.type)
-      const list = getPlayersOfParty(data.party)
-      console.log(`party-join in ${data.party}`, list)
+    socket.on('add-word', function (word,indexOfBlank) {
+      console.log(word, indexOfBlank)
+      
+      // cycle through groups
+      // look for match
+      // set key's value to index of blank. this word goes into Nth blank
+      Object.keys(wordList).forEach((g) => Object.keys(wordList[g]).forEach(w => {
+        if (w === word) {
+          wordList[g][w] = indexOfBlank
+          console.log(wordList)
 
-      socketInstance.in(player.party).emit('party-update', list)
-    })
-
-    socket.on('party-end', function () {
-      // const party = getPlayer(socket.id).party
-      // partyManager.endParty(party)
-      // socket.in(party).emit('party-end')
-    })
-
-    socket.on('party-set-avatar-url', function (url) {
-      const player = getPlayer(socket.id)
-      player.avatarUrl = url
-      const list = getPlayersOfParty(player.party)
-      socketInstance.in(player.party).emit('party-update', list)
-    })
-
-    socket.on('party-set-nickname', function (nickname) {
-      console.log(nickname)
-
-      const player = getPlayer(socket.id)
-
-      if (!player) {
-        return
-      }
-
-      player.nickname = nickname
-      const list = getPlayersOfParty(player.party)
-      console.log(list)
-      socketInstance.in(player.party).emit('party-update', list)
+          socket.broadcast.emit('add-word', wordList, indexOfBlank)
+        }
+      }))
     })
 
     socket.on('disconnect', function (fn) {
-      const deletedPlayer = deletePlayer(socket.id)
-
-      if (deletedPlayer) {
-        const list = getPlayersOfParty(deletedPlayer.party)
-
-        console.log(`disconnect from ${deletedPlayer.party}`, list)
-        socketInstance.in(deletedPlayer.party).emit('party-update', list)
-      }
-
+      console.log(`disconnect: ${socket}`)
     })
-
-    socket.on('quest-join', function (opts, fn) {
-      console.log(`a ${opts.type} joined ${opts.party}`)
-
-      world[socket.id] = {
-        id: socket.id,
-        location: [3, 3],
-        isClenched: false,
-        type: opts.type,
-        color: opts.color,
-        party: opts.party,
-      }
-
-      getMembersList(opts.party, (members) => {
-        const world = members
-        fn(world)
-      })
-    })
-
-    socket.on('send-move', function(location) {
-        const member = world[socket.id]
-
-        if (member) {
-          member.location = location
-
-          getMembersList(member.party, (members) => {
-              const world = members
-              socket.to(member.party).emit('world-update', world)
-            })
-          }
-    })
-
-    socket.on('send-push', function(payload) {
-      console.log('got send push')
-        const member = world[payload.who]
-
-        if (member) {
-          member.location = payload.location
-
-          socket.to(payload.who).emit('move-you', payload.location)
-
-          getMembersList(member.party, (members) => {
-              const world = members
-              socket.to(member.party).emit('world-update', world)
-              console.log('sent push')
-            })
-          }
-    })
-
-    socket.on('color-change', function(color) {
-        const member = world[socket.id]
-
-        if (member) {
-          member.color = color
-
-          getMembersList(member.party, (members) => {
-              const world = members
-              socket.to(member.party).emit('world-update', world)
-            })
-          }
-    })
-
-    socket.on('send-clench', function(isClenched) {
-    })
-
-
   })
 }

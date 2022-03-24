@@ -14,15 +14,20 @@
 
 <script>
 export default {
-  props: ['type', 'wordList'],
+  props: ['type', 'wordList', 'socket'],
   data() {
     return {
       word: '',
     }
   },
   methods: {
+    setWord(word) {
+      this.word = word
+    },
     addWord(e) {
+      const i = this.$parent.$children.indexOf(this)
       console.log(`add-word: ${this.word}`)
+      this.socket.emit('add-word', this.word, i)
     },
     sayType() {
       console.log(this.wordList[this.type])

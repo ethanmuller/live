@@ -1,22 +1,22 @@
 <template>
   <main class="main">
 
-uh: {{isConnected}}
+connected: {{isConnected}}
     <NuxtLink :to="{ path: '/', query: this.$route.query }" v-if="isMod" style="padding: 0.5rem; display: inline-block;">&lt;- Party Index</NuxtLink>
 
-    <div id="poemcontainer">
+    <div id="poemcontainer" ref="poem">
       <p>The
-        <WordSelector type='adjective' :wordList='wordList' />
-        <WordSelector type='noun' :wordList='wordList' />
-        <WordSelector type='verbed' :wordList='wordList' />
+        <WordSelector type='adjective' :wordList='wordList' :socket='socket' />
+        <WordSelector type='noun' :wordList='wordList' :socket='socket' />
+        <WordSelector type='verbed' :wordList='wordList' :socket='socket' />
         the
-        <WordSelector type='adjective' :wordList='wordList' />
-        <WordSelector type='noun' :wordList='wordList' /></p>
+        <WordSelector type='adjective' :wordList='wordList' :socket='socket' />
+        <WordSelector type='noun' :wordList='wordList' :socket='socket' /></p>
       <p>But this caused the
-        <WordSelector type='noun' :wordList='wordList' />
+        <WordSelector type='noun' :wordList='wordList' :socket='socket' />
         to
-        <WordSelector type='verb' :wordList='wordList' />
-        <WordSelector type='adverbly' :wordList='wordList' /></p>
+        <WordSelector type='verb' :wordList='wordList' :socket='socket' />
+        <WordSelector type='adverbly' :wordList='wordList' :socket='socket' /></p>
     </div>
 
     <div class="mod-panel" v-if="isMod">
@@ -28,10 +28,12 @@ uh: {{isConnected}}
 
 <script>
 import socket from '~/plugins/socket.io-client.js'
+import wordList from '../../mad-lib.js'
 
 export default {
   data() {
     return {
+      socket: socket,
       isConnected: false,
       hostParty: {},
       hostPartyTicket: '',
@@ -39,65 +41,10 @@ export default {
       selectedGame: 'poem',
       parties: [],
       isMod: this.$route.query.role === 'mod',
-      wordList: {
-        'noun': {
-          'fox': -1,
-          'dog': -1,
-          'cat': -1,
-          'horse': -1,
-          'cow': -1,
-          'tardigrade': -1,
-          'baby': -1,
-          'elder': -1,
-          'giraffe': -1,
-          'yak': -1,
-          'octopus': -1,
-          'rock': -1,
-          'couch': -1,
-          'loaf of bread': -1,
-        },
-        'adjective': {
-          'quick': -1,
-          'brown': -1,
-          'lazy': -1,
-          'pale': -1,
-          'wacky': -1,
-          'indescribable': -1,
-          'nondescript': -1,
-          'long-haired': -1,
-        },
-        'verb': {
-          'fall asleep': -1,
-          'jolt awake': -1,
-          'flop over': -1,
-          'think deeply': -1,
-          'smile': -1,
-        },
-        'verbed': {
-          'jumped over': -1,
-          'slipped past': -1,
-          'crept by': -1,
-          'completely ignored': -1,
-          'sniffed': -1,
-          'talked to': -1,
-          'became': -1,
-        },
-        'adverbly': {
-          'immediately': -1,
-          'violently': -1,
-          'peacefully': -1,
-          'freely': -1,
-          'gracefully': -1,
-          'clumsily': -1,
-        },
-      },
+      wordList,
     }
   },
   
-  mounted() {
-    this.hostPartyTicket = Math.floor(Math.random() * 1000000)
-  },
-
   async fetch() {
     this.parties = await fetch('/api/party', {
         method: 'GET',
@@ -116,14 +63,13 @@ export default {
 
   mounted() {
     console.log('hi')
+
+
+    this.hostPartyTicket = Math.floor(Math.random() * 1000000)
     socket.on('connect', this.handleConnect)
     socket.on('disconnect', this.handleDisconnect)
-
+    socket.on('add-word', this.handleUpdate)
     socket.connect()
-    // socket.on('party-update', this.receivePartyUpdate)
-    // socket.on('party-end', this.receivePartyEnd)
-
-    // this.connect()
   },
 
   beforeDestroy() {
@@ -137,6 +83,12 @@ export default {
   },
 
   methods: {
+             handleUpdate(a,b) {
+                 alert('got it')
+               this.wordList = a
+                 const blanks = this.$children.filter(i => i._name === '<WordSelector>')
+                 blanks[b].setWord('ayo')
+             },
     async createParty() {
         const data = {
              ticket: this.hostPartyTicket,
