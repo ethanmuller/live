@@ -4,7 +4,7 @@
       <span class="tx-smol">
         {{ type }}
       </span>
-      <select>
+      <select @change="addWord" v-model="word">
         <option value=""></option>
         <option v-for="availability, word in wordList[type]">{{ word }}</option>
       </select>
@@ -15,7 +15,15 @@
 <script>
 export default {
   props: ['type', 'wordList'],
+  data() {
+    return {
+      word: '',
+    }
+  },
   methods: {
+    addWord(e) {
+      console.log(`add-word: ${this.word}`)
+    },
     sayType() {
       console.log(this.wordList[this.type])
     },
