@@ -1,20 +1,31 @@
 <template>
-  <main class="main main--home">
-    <div id="poemcontainer">
-      <p>The
-        <WordSelector type='adjective' :wordList='wordList' />
-        <WordSelector type='noun' :wordList='wordList' />
-        <WordSelector type='verbed' :wordList='wordList' />
-        the
-        <WordSelector type='adjective' :wordList='wordList' />
-        <WordSelector type='noun' :wordList='wordList' /></p>
-      <p>But this caused the
-        <WordSelector type='noun' :wordList='wordList' />
-        to
-        <WordSelector type='verb' :wordList='wordList' />
-        <WordSelector type='adverbly' :wordList='wordList' /></p>
+<main class="main main--home">
+  
+  <div class="join-chunk">
+    <div v-if="parties.length < 1" style="padding: 1.5rem;"">Nothing is happening here right now. Please try refreshing your browser.</div>
+    <div v-else>
+      active parties:
+      <ul class="list-of-parties">
+        <li v-for="party in parties">
+          <NuxtLink :to="{ path: `/party/${party.id}`, query: $route.query }">{{party.id}}</NuxtLink>, {{party.memberCount}} members
+        </li>
+      </ul>
     </div>
-  </main>
+  </div>
+  <div class="host-note" v-if="$route.query.role === 'mod'">
+    <form @submit.prevent="createParty">
+      <label>
+        Game
+        <select v-model="selectedGame" required>
+          <option value="poem">Poem</option>
+          <!-- <option value="masks">Masks</option> -->
+          <option value="quest">Quest</option>
+          </select>
+        </label>
+        <button class="btn btn--sm">Create Party</button>
+      </form>
+    </div>
+</main>
 </template>
 
 <script>
@@ -26,64 +37,11 @@ export default {
       partyCode: '',
       selectedGame: 'poem',
       parties: [],
-      wordList: {
-        'noun': {
-          'fox': -1,
-          'dog': -1,
-          'cat': -1,
-          'horse': -1,
-          'cow': -1,
-          'tardigrade': -1,
-          'baby': -1,
-          'elder': -1,
-          'giraffe': -1,
-          'yak': -1,
-          'octopus': -1,
-          'rock': -1,
-          'couch': -1,
-          'loaf of bread': -1,
-        },
-        'adjective': {
-          'quick': -1,
-          'brown': -1,
-          'lazy': -1,
-          'pale': -1,
-          'wacky': -1,
-          'indescribable': -1,
-          'nondescript': -1,
-          'long-haired': -1,
-        },
-        'verb': {
-          'fall asleep': -1,
-          'jolt awake': -1,
-          'flop over': -1,
-          'think deeply': -1,
-          'smile': -1,
-        },
-        'verbed': {
-          'jumped over': -1,
-          'slipped past': -1,
-          'crept by': -1,
-          'completely ignored': -1,
-          'sniffed': -1,
-          'talked to': -1,
-          'became': -1,
-        },
-        'adverbly': {
-          'immediately': -1,
-          'violently': -1,
-          'peacefully': -1,
-          'freely': -1,
-          'gracefully': -1,
-          'clumsily': -1,
-        },
-      },
     }
   },
   
   mounted() {
     this.hostPartyTicket = Math.floor(Math.random() * 1000000)
-    console.log(this.wordList)
   },
 
   async fetch() {
@@ -146,7 +104,4 @@ export default {
 </script>
 
 <style>
-p {
-  margin: 3rem 0;
-}
 </style>
