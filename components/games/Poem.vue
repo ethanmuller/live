@@ -3,7 +3,30 @@
 
     <NuxtLink :to="{ path: '/', query: this.$route.query }" v-if="isMod" style="padding: 0.5rem; display: inline-block;">&lt;- Party Index</NuxtLink>
 
-    <div id="poemcontainer" ref="poem">
+
+    <div id="poemcontainer">
+    <div v-if="false">
+      <p>長頭髮的＿住在＿＿裡</p>
+      <p>討厭＿＿裡強壯的＿＿</p>
+      <p>笑起來像＿＿</p>
+      <p>忘記的時候像＿＿的＿＿</p>
+      <p></p>
+      <p>有一天＿被＿＿了</p>
+      <p>＿們不知道明天會有什麼＿＿</p>
+      <p>＿在＿＿裡等待著＿＿出現</p>
+      <p>途中＿＿死了＿次</p>
+      <p></p>
+      <p>幸好還有＿＿</p>
+      <p>＿帶著＿＿和＿＿</p>
+      <p>用時間和＿＿</p>
+      <p>尋回了＿＿＿＿的＿＿</p>
+      <p></p>
+      <p>那天以後</p>
+      <p>一切都＿＿＿＿</p>
+      <p>可是永遠有人記得那個＿月</p>
+      <p>非常非常地冷</p>
+      <p></p>
+    </div>
       <p>The
         <WordSelector type='adjective' :wordList='wordList' :socket='socket' />
         <WordSelector type='noun' :wordList='wordList' :socket='socket' />

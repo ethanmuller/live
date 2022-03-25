@@ -33,13 +33,12 @@ module.exports = {
     'smile': -1,
   },
   'verbed': {
+    'talked to': -1,
+    'became': -1,
     'jumped over': -1,
     'slipped past': -1,
     'crept by': -1,
     'completely ignored': -1,
-    'sniffed': -1,
-    'talked to': -1,
-    'became': -1,
   },
   'adverbly': {
     'immediately': -1,

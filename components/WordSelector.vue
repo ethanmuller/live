@@ -42,6 +42,7 @@ export default {
     top: -0.8em;
     left: 0;
     width: 100%;
+    opacity: 0.3;
   }
   .word-selector {
     position: relative;
