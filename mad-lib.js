@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   'noun': {
     'fox': -1,
     'dog': -1,

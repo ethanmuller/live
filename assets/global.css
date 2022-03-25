@@ -215,3 +215,6 @@ input {
   font-weight: bold;
   letter-spacing: 0.05rem;
 }
+.mod-panel__controls {
+  display: flex;
+}

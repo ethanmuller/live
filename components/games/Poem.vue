@@ -20,7 +20,10 @@
 
     <div class="mod-panel" v-if="isMod">
       <span class="mod-panel__title">Mod Panel</span>
-      <div class="host-note"><button @click="endPartyButton()" class="btn btn--mod">End Party</button></div>
+      <div class="mod-panel__controls">
+        <div class="host-note"><button @click="sendReset()" class="btn btn--mod">Reset Poem</button></div>
+        <!--<div class="host-note"><button @click="endPartyButton()" class="btn btn--mod">End Party</button></div>-->
+      </div>
     </div>
   </main>
 </template>
@@ -41,12 +44,12 @@ export default {
     mounted() {
       this.socket.on('connect', this.connect)
       this.socket.on('update', this.addWord)
+      this.socket.on('reset', this.reset)
       this.socket.emit('join', (serverWordList) => {
           this.wordList = serverWordList
           const blanks = this.$children.filter(c => c._name === '<WordSelector>')
 
           blanks.forEach((b,index) => {
-              console.log(b, index)
               Object.keys(this.wordList).forEach((g) => Object.keys(this.wordList[g]).forEach((w) => {
                     const i = this.wordList[g][w]
                     if (i === index) {
@@ -61,6 +64,25 @@ export default {
   },
 
   methods: {
+    sendReset() {
+      this.socket.emit('reset')
+    },
+    reset(wordList) {
+    console.log('resetting')
+      this.wordList = wordList;
+      const blanks = this.$children.filter(c => c._name === '<WordSelector>');
+
+      blanks.forEach((b,index) => {
+        Object.keys(this.wordList).forEach((g) => Object.keys(this.wordList[g]).forEach((w) => {
+          const i = this.wordList[g][w]
+          if (i === -1) {
+            b.setWord('')
+          } else if (i === index) {
+            b.setWord(w)
+          }
+          }))
+      })
+    },
     connect() {
     },
     addWord(word, i, wordList) {
