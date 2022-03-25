@@ -26,7 +26,7 @@ export default {
     },
     addWord(e) {
       const i = this.$parent.$children.filter(c => c._name === '<WordSelector>').indexOf(this)
-      this.socket.emit('add-word', this.word, i)
+      this.socket.emit('update', this.word, i)
     },
   },
 }

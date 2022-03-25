@@ -2,6 +2,8 @@
 // but it is mutated over the program's lifetime
 import wordList from '../mad-lib.js'
 
+const defaultWordList = Object.assign({}, wordList)
+
 export let io = null;
 
 export default function(socketInstance) {
@@ -14,12 +16,12 @@ export default function(socketInstance) {
       cb(wordList)
     })
 
-    socket.on('add-word', function (word,indexOfBlank) {
-     console.log('server received add-word', word, 'from socket', socket.id)
+    socket.on('update', function (word,indexOfBlank) {
+     console.log('server received update', word, 'from socket', socket.id)
       Object.keys(wordList).forEach((g) => Object.keys(wordList[g]).forEach(w => {
         if (w === word) {
           wordList[g][w] = indexOfBlank
-          socket.broadcast.emit('add-word', word, indexOfBlank, wordList, socket.id)
+          socket.broadcast.emit('update', word, indexOfBlank, wordList, socket.id)
           console.log(wordList)
         }
       }))

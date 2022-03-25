@@ -40,9 +40,20 @@ export default {
   
     mounted() {
       this.socket.on('connect', this.connect)
-      this.socket.on('add-word', this.addWord)
+      this.socket.on('update', this.addWord)
       this.socket.emit('join', (serverWordList) => {
-        // this.wordList = serverWordList
+          this.wordList = serverWordList
+          const blanks = this.$children.filter(c => c._name === '<WordSelector>')
+
+          blanks.forEach((b,index) => {
+              console.log(b, index)
+              Object.keys(this.wordList).forEach((g) => Object.keys(this.wordList[g]).forEach((w) => {
+                    const i = this.wordList[g][w]
+                    if (i === index) {
+                      b.setWord(w)
+                    }
+              }))
+          })
       })
     },
 
