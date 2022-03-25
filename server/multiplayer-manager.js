@@ -21,7 +21,6 @@ export default function(socketInstance) {
 
     socket.on('reset', function () {
       wordList = deepCopy(originalWordList)
-    console.log('resetting', wordList)
       io.emit('reset', wordList)
     })
 

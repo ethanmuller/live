@@ -68,7 +68,6 @@ export default {
       this.socket.emit('reset')
     },
     reset(wordList) {
-    console.log('resetting')
       this.wordList = wordList;
       const blanks = this.$children.filter(c => c._name === '<WordSelector>');
 
