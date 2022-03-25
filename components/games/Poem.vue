@@ -66,84 +66,29 @@ export default {
 
 
     this.hostPartyTicket = Math.floor(Math.random() * 1000000)
-    socket.on('connect', this.handleConnect)
-    socket.on('disconnect', this.handleDisconnect)
     socket.on('add-word', this.handleUpdate)
     socket.connect()
   },
 
   beforeDestroy() {
     console.log('bye')
-    socket.disconnect()
 
-    socket.off('connect', this.handleConnect)
-    socket.off('disconnect', this.handleDisconnect)
     // socket.off('party-update', this.receivePartyUpdate)
     // socket.off('party-end', this.receivePartyEnd)
   },
 
   methods: {
-             handleUpdate(a,b) {
-                 alert('got it')
-               this.wordList = a
-                 const blanks = this.$children.filter(i => i._name === '<WordSelector>')
-                 blanks[b].setWord('ayo')
+             handleUpdate(a,b,c, d) {
+             console.log('update!')
+             if (d === this.socket.id) {
+             return
+             }
+
+               console.log('client received add-word', a, 'from socket id', d)
+                 //this.wordList = c
+                 // const blanks = this.$children.filter(i => i._name === '<WordSelector>')
+                 // blanks[b].setWord('ayo')
              },
-    async createParty() {
-        const data = {
-             ticket: this.hostPartyTicket,
-             selectedGame: this.selectedGame,
-        }
-
-      const response = await fetch('/api/party', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      })
-
-      const responseJSON = await response.json()
-
-      this.$router.push({
-        name: 'party-party',
-        params: {
-          party: responseJSON.id,
-          role: 'host',
-          ticket: this.hostPartyTicket,
-        },
-        query: {
-          role: 'mod',
-        },
-      })
-      // $router.push({name: 'next-page', params: {foo: 1}})
-    },
-    handleConnect() {
-      this.isConnected = true
-
-      socket.emit('party-join', { party: this.$route.params.party, type: this.$route.query.role || 'player' })
-    },
-    handleDisconnect() {
-      this.isConnected = false
-    },
-    joinParty() {
-      this.$router.push({
-        name: 'party-party',
-        params: {
-          party: this.partyCode,
-          role: 'guest',
-        },
-      })
-    },
-    endParty() {
-      this.$router.push({ path: '/', query: this.$route.query })
-    },
-    endPartyButton() {
-        if (this.people?.length < 2 || confirm(`This will kick everybody out of the party. You're sure you want to do this?`)) {
-        socket.emit('party-end')
-        this.endParty()
-      }
-    },
   },
 }
 </script>
