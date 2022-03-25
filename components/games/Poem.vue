@@ -1,7 +1,6 @@
 <template>
   <main class="main">
 
-connected: {{isConnected}}
     <NuxtLink :to="{ path: '/', query: this.$route.query }" v-if="isMod" style="padding: 0.5rem; display: inline-block;">&lt;- Party Index</NuxtLink>
 
     <div id="poemcontainer" ref="poem">
@@ -11,7 +10,7 @@ connected: {{isConnected}}
         <WordSelector type='verbed' :wordList='wordList' :socket='socket' />
         the
         <WordSelector type='adjective' :wordList='wordList' :socket='socket' />
-        <WordSelector type='noun' :wordList='wordList' :socket='socket' /></p>
+        <WordSelector type='noun' :wordList='wordList' :socket='socket' />
       <p>But this caused the
         <WordSelector type='noun' :wordList='wordList' :socket='socket' />
         to
@@ -34,61 +33,30 @@ export default {
   data() {
     return {
       socket: socket,
-      isConnected: false,
-      hostParty: {},
-      hostPartyTicket: '',
-      partyCode: '',
-      selectedGame: 'poem',
-      parties: [],
       isMod: this.$route.query.role === 'mod',
       wordList,
     }
   },
   
-  async fetch() {
-    this.parties = await fetch('/api/party', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then(res => res.json())
-
-    if (this.parties.length === 1 && this.$route.query.role !== 'mod') {
-      this.$router.push({
-        path: `/party/${this.parties[0].id}`,
-        query: this.$route.query,
+    mounted() {
+      this.socket.on('connect', this.connect)
+      this.socket.on('add-word', this.addWord)
+      this.socket.emit('join', (serverWordList) => {
+        // this.wordList = serverWordList
       })
-    }
-  },
-
-  mounted() {
-    console.log('hi')
-
-
-    this.hostPartyTicket = Math.floor(Math.random() * 1000000)
-    socket.on('add-word', this.handleUpdate)
-    socket.connect()
-  },
+    },
 
   beforeDestroy() {
-    console.log('bye')
-
-    // socket.off('party-update', this.receivePartyUpdate)
-    // socket.off('party-end', this.receivePartyEnd)
   },
 
   methods: {
-             handleUpdate(a,b,c, d) {
-             console.log('update!')
-             if (d === this.socket.id) {
-             return
-             }
-
-               console.log('client received add-word', a, 'from socket id', d)
-                 //this.wordList = c
-                 // const blanks = this.$children.filter(i => i._name === '<WordSelector>')
-                 // blanks[b].setWord('ayo')
-             },
+    connect() {
+    },
+    addWord(word, i, wordList) {
+      this.wordList = wordList
+      const blanks = this.$children.filter(c => c._name === '<WordSelector>')
+      blanks[i].setWord(word)
+    }
   },
 }
 </script>

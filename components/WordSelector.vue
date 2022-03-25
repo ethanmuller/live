@@ -25,12 +25,8 @@ export default {
       this.word = word
     },
     addWord(e) {
-      const i = this.$parent.$children.indexOf(this)
-      console.log(`add-word: ${this.word}`)
+      const i = this.$parent.$children.filter(c => c._name === '<WordSelector>').indexOf(this)
       this.socket.emit('add-word', this.word, i)
-    },
-    sayType() {
-      console.log(this.wordList[this.type])
     },
   },
 }
