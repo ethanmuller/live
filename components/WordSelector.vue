@@ -4,11 +4,11 @@
       <!--<span class="tx-smol">
         {{ type }}
       </span>-->
-      <select @change="addWord" v-model="word">
+      <select @change="addWord" v-model="word" :data-word="word">
         <option v-if="type=='one'" value="" selected="" disabled="" hidden="">＿</option>
         <option v-if="type=='two'" value="" selected="" disabled="" hidden="">＿＿</option>
         <option v-if="type=='four'" value="" selected="" disabled="" hidden="">＿＿＿＿</option>
-        <option v-for="availability, word in wordList[type]" :value="word">{{ word }}</option>
+        <option v-for="availability, word in wordList[type]" :value="word" :data-word="word">{{ word }}</option>
       </select>
     </label>
   </span>
@@ -25,12 +25,10 @@ export default {
   methods: {
     setWord(word) {
       this.word = word
-      this.$el.children[0].children[0].dataset.word = this.word
     },
     addWord(e) {
       const i = this.$parent.$children.filter(c => c._name === '<WordSelector>').indexOf(this)
       this.socket.emit('update', this.word, i)
-      this.$el.children[0].children[0].dataset.word = this.word
     },
   },
 }
@@ -78,16 +76,16 @@ export default {
     font-family: 'Noto Sans TC', sans-serif;background-color: transparent;
   }
   
-  select[data-word='他'], select[data-word='我']  {
+  [data-word='他'], [data-word='我']  {
     color: #4A2B9A;
   }
-  select[data-word='九月'], select[data-word='時間'], select[data-word='冬天']  {
+  [data-word='九月'], [data-word='時間'], [data-word='冬天']  {
     color: #BE9D57;
   }
-  select[data-word='遺忘'], select[data-word='弄丟'], select[data-word='原諒']  {
+  [data-word='遺忘'], [data-word='弄丟'], [data-word='原諒']  {
     color: #A8214C;
   }
-  select[data-word='子彈'], select[data-word='獵槍'], select[data-word='鋼琴'], select[data-word='森林']  {
+  [data-word='子彈'], [data-word='獵槍'], [data-word='鋼琴'], [data-word='森林']  {
     color: #2E7B30;
   }
 </style>
