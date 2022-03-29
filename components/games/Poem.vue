@@ -1,32 +1,33 @@
 <template>
   <main class="main">
 
-    <NuxtLink :to="{ path: '/', query: this.$route.query }" v-if="isMod" style="padding: 0.5rem; display: inline-block;">&lt;- Party Index</NuxtLink>
+    <NuxtLink :to="{ path: '/', query: this.$route.query }" v-if="isMod" class="partylink">&lt;- Party Index</NuxtLink>
 
 
     <div id="poemcontainer">
-    <div v-if="false">
-      <p>長頭髮的＿住在＿＿裡</p>
-      <p>討厭＿＿裡強壯的＿＿</p>
-      <p>笑起來像＿＿</p>
-      <p>忘記的時候像＿＿的＿＿</p>
-      <p></p>
-      <p>有一天＿被＿＿了</p>
-      <p>＿們不知道明天會有什麼＿＿</p>
-      <p>＿在＿＿裡等待著＿＿出現</p>
-      <p>途中＿＿死了＿次</p>
-      <p></p>
-      <p>幸好還有＿＿</p>
-      <p>＿帶著＿＿和＿＿</p>
-      <p>用時間和＿＿</p>
-      <p>尋回了＿＿＿＿的＿＿</p>
-      <p></p>
+    <div>
+      <p>長頭髮的<WordSelector type='one' :wordList='wordList' :socket='socket' />住在<WordSelector type='two' :wordList='wordList' :socket='socket' />裡</p>
+      <p>討厭<WordSelector type='two' :wordList='wordList' :socket='socket' />裡強壯的<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
+      <p>笑起來像<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
+      <p>忘記的時候像<WordSelector type='two' :wordList='wordList' :socket='socket' />的<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
+      <p><br></p>
+      <p>有一天<WordSelector type='one' :wordList='wordList' :socket='socket' />被<WordSelector type='two' :wordList='wordList' :socket='socket' />了</p>
+      <p><WordSelector type='one' :wordList='wordList' :socket='socket' />們不知道明天會有什麼<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
+      <p><WordSelector type='one' :wordList='wordList' :socket='socket' />在<WordSelector type='two' :wordList='wordList' :socket='socket' />裡等待著<WordSelector type='two' :wordList='wordList' :socket='socket' />出現</p>
+      <p>途中<WordSelector type='two' :wordList='wordList' :socket='socket' />死了<WordSelector type='one' :wordList='wordList' :socket='socket' />次</p>
+      <p><br></p>
+      <p>幸好還有<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
+      <p><WordSelector type='one' :wordList='wordList' :socket='socket' />帶著<WordSelector type='two' :wordList='wordList' :socket='socket' />和<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
+      <p>用時間和<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
+      <p>尋回了<WordSelector type='four' :wordList='wordList' :socket='socket' />的<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
+      <p><br></p>
       <p>那天以後</p>
-      <p>一切都＿＿＿＿</p>
-      <p>可是永遠有人記得那個＿月</p>
+      <p>一切都<WordSelector type='four' :wordList='wordList' :socket='socket' /></p>
+      <p>可是永遠有人記得那個<WordSelector type='one' :wordList='wordList' :socket='socket' />月</p>
       <p>非常非常地冷</p>
-      <p></p>
+      <p><br></p>
     </div>
+    <div v-if="false">
       <p>The
         <WordSelector type='adjective' :wordList='wordList' :socket='socket' />
         <WordSelector type='noun' :wordList='wordList' :socket='socket' />
@@ -39,6 +40,7 @@
         to
         <WordSelector type='verb' :wordList='wordList' :socket='socket' />
         <WordSelector type='adverbly' :wordList='wordList' :socket='socket' /></p>
+    </div>
     </div>
 
     <div class="mod-panel" v-if="isMod">
@@ -53,7 +55,8 @@
 
 <script>
 import socket from '~/plugins/socket.io-client.js'
-import wordList from '../../mad-lib.js'
+//import wordList from '../../mad-lib.js'
+import wordList from '../../fei-words.js'
 
 export default {
   data() {
@@ -118,6 +121,12 @@ export default {
 
 <style>
 p {
-  margin: 3rem 0;
+  margin: 0 0;
+}
+.partylink {
+  padding: 0.5rem; display: inline-block;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
 }
 </style>

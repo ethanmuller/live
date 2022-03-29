@@ -1,6 +1,7 @@
 // note we are importing the default state of data from this file
 // but it is mutated over the program's lifetime
-let wordList = require('../mad-lib.js')
+//let wordList = require('../mad-lib.js')
+let wordList = require('../fei-words.js')
 
 function deepCopy(data) {
   return JSON.parse(JSON.stringify(data))

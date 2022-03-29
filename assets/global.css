@@ -56,9 +56,12 @@ html {
 }
 
 #poemcontainer {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 28px;
-  padding: 1.5rem;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 36px;
 }
 
 #poemcontainer p {
@@ -272,7 +275,9 @@ input {
 .mod-panel {
   background: #00f;
   color: white;
-  width: 100%;
+  left: 0px;
+  position: absolute;
+  top: 0px;
   padding: 1.5rem;
 }
 .mod-panel__title {
