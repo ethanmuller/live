@@ -365,7 +365,7 @@ audio {
   left: 0;
 }
 h1, h2 {
-  font-size: inherit;
+  /* font-size: inherit;  */
   font-weight: normal;
   margin: 0;
   text-transform: uppercase;
