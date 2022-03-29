@@ -55,18 +55,6 @@ html {
   background-color: #35495e;
 }
 
-#poemcontainer {
-    position: absolute;
-    top: 0px;
-    left: 50%;
-    transform: translate3d(-50%, 0, 0);
-    font-family: 'Noto Sans TC', sans-serif;
-    font-size: 36px;
-}
-
-#poemcontainer p {
-  
-}
 body {
     background: #F3F3F3;
     font-family: 'IBM Plex Sans', sans-serif;
@@ -275,9 +263,7 @@ input {
 .mod-panel {
   background: #00f;
   color: white;
-  left: 0px;
-  position: absolute;
-  top: 0px;
+  width: 100%;
   padding: 1.5rem;
 }
 .mod-panel__title {
