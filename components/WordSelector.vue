@@ -26,8 +26,15 @@ export default {
     setWord(word) {
       this.word = word
     },
+    findIndexOfInstance(self) {
+      // this is a dodgy function, but it's what we use
+      // to figure out which Nth word this component represents
+      return self.$parent.$children
+        .filter(c => c._name === '<WordSelector>')
+        .indexOf(this)
+    },
     addWord(e) {
-      const i = this.$parent.$children.filter(c => c._name === '<WordSelector>').indexOf(this)
+      const i = this.findIndexOfInstance(this)
       this.socket.emit('update', this.word, i)
     },
   },
