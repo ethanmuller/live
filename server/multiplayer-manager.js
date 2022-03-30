@@ -39,13 +39,6 @@ export default function(socketInstance) {
         return callback(err)
       }
 
-      // make sure blank isn't already filled
-      if (!!blankList[indexOfBlank]) {
-        const err = { err: 'something is already in that blank' }
-        console.error(err)
-        return callback(err)
-      }
-
       // mark word as used
       blankList[indexOfBlank] = word
 

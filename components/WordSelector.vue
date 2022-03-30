@@ -4,7 +4,7 @@
       <!--<span class="tx-smol">
         {{ type }}
       </span>-->
-      <select @change="addWord" v-model="word" :data-word="word" :disabled="word !== ''">
+      <select @change="addWord" v-model="word" :data-word="word">
         <option v-if="length=='1'" value="" selected="" disabled="" hidden="">＿</option>
         <option v-if="length=='2'" value="" selected="" disabled="" hidden="">＿＿</option>
         <option v-if="length=='4'" value="" selected="" disabled="" hidden="">＿＿＿＿</option>
