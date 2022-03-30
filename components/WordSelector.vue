@@ -2,7 +2,8 @@
   <span class="word-selector">
     <label>
       <select :data-word="word" @change="addWord" v-model="word" :data-length="length" :disabled="isLocked">
-        <option value="" selected="" disabled="" hidden="" :data-length="length"></option>
+        <option value="" selected="" disabled="" hidden="" :data-length="length">{{"＿".repeat(parseInt(length, 10))}}</option>
+        <option v-if="length=='1'" value="" selected="" disabled="" hidden="" :data-length="length">kF</option>
         <!-- todo: filter by length-->
         <option v-for="word in wordList.filter(w => w.length === parseInt(length, 10))" :value="word" :data-word="word" :data-length="length" :disabled="isWordUsed(word)">{{ word }}</option>
       </select>
