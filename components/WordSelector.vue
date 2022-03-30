@@ -8,7 +8,7 @@
         <option v-if="type=='one'" value="" selected="" disabled="" hidden="">＿</option>
         <option v-if="type=='two'" value="" selected="" disabled="" hidden="">＿＿</option>
         <option v-if="type=='four'" value="" selected="" disabled="" hidden="">＿＿＿＿</option>
-        <option v-for="availability, word in wordList[type]" :value="word" :data-word="word">{{ word }}</option>
+        <option v-for="availability, word in wordList[type]" :disabled="isWordUsed(word)" :value="word" :data-word="word">{{ word }}</option>
       </select>
     </label>
   </span>
@@ -20,7 +20,13 @@ export default {
   data() {
     return {
       word: "",
+      pastWords: [],
     }
+  },
+  watch: {
+    "word": function(to, from) {
+      this.pastWords.unshift(to)
+    },
   },
   methods: {
     setWord(word) {
@@ -33,9 +39,26 @@ export default {
         .filter(c => c._name === '<WordSelector>')
         .indexOf(this)
     },
+    isWordUsed(word) {
+      let allWords = []
+
+      Object.keys(this.wordList).forEach((g) => Object.keys(this.wordList[g]).forEach(w => {
+        if (w === word) {
+        }
+      }))
+
+      return allWords.indexOf(word) > -1
+    },
     addWord(e) {
       const i = this.findIndexOfInstance(this)
-      this.socket.emit('update', this.word, i)
+      const to = this.word
+      const from = this.pastWords[0]
+      this.socket.emit('update', to, from, i, (err) => {
+        if (err) {
+          // revert back to previous state
+          this.word = from
+        }
+      })
     },
   },
 }
@@ -94,5 +117,8 @@ export default {
   }
   [data-word='子彈'], [data-word='獵槍'], [data-word='鋼琴'], [data-word='森林']  {
     color: #2E7B30;
+  }
+  option[disabled] {
+    color: #d2d2d2;
   }
 </style>

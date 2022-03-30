@@ -115,10 +115,10 @@ export default {
     },
     connect() {
     },
-    addWord(word, i, wordList) {
+    addWord(to, from, i, wordList) {
       this.wordList = wordList
       const blanks = this.$children.filter(c => c._name === '<WordSelector>')
-      blanks[i].setWord(word)
+      blanks[i].setWord(to)
     }
   },
 }

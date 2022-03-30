@@ -6,12 +6,18 @@ let wordList = require('../fei-words.js')
 function deepCopy(data) {
   return JSON.parse(JSON.stringify(data))
 }
+
 const originalWordList = deepCopy(wordList)
 
 export let io = null;
 
 export default function(socketInstance) {
   io = socketInstance
+
+  function reset() {
+    wordList = deepCopy(originalWordList)
+    io.emit('reset', wordList)
+  }
 
   socketInstance.on('connection', (socket) => {
     console.log('HELLO ', socket.id)
@@ -20,17 +26,30 @@ export default function(socketInstance) {
       cb(wordList)
     })
 
-    socket.on('reset', function () {
-      wordList = deepCopy(originalWordList)
-      io.emit('reset', wordList)
-    })
+    socket.on('reset', reset)
 
-    socket.on('update', function (word,indexOfBlank) {
-     console.log('server received update', word, 'from socket', socket.id)
+    socket.on('update', function (to,from,indexOfBlank, callback) {
+     console.log('WORD  ', socket.id, ': ', to, from)
+
       Object.keys(wordList).forEach((g) => Object.keys(wordList[g]).forEach(w => {
-        if (w === word) {
+        if (w === to) {
+
+          if (wordList[g][w] !== -1) {
+            return callback({ err: 'word already in use' })
+          }
+
+          // mark word as used
           wordList[g][w] = indexOfBlank
-          socket.broadcast.emit('update', word, indexOfBlank, wordList, socket.id)
+
+          // free up word
+
+          // tell everybody about the new selected word
+          socket.broadcast.emit('update', to, from, indexOfBlank, wordList, socket.id)
+
+          // we don't use this callback to send data,
+          // just so they can stop waiting to hear back
+          // in case of an error
+          return callback()
         }
       }))
     })
