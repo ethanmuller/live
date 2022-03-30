@@ -4,12 +4,12 @@
       <!--<span class="tx-smol">
         {{ type }}
       </span>-->
-      <select @change="addWord" v-model="word" :data-word="word">
-        <option v-if="length=='1'" value="" selected="" disabled="" hidden="">＿</option>
-        <option v-if="length=='2'" value="" selected="" disabled="" hidden="">＿＿</option>
-        <option v-if="length=='4'" value="" selected="" disabled="" hidden="">＿＿＿＿</option>
+      <select @change="addWord" v-model="word" :data-length="length">
+        <option v-if="length=='1'" value="" selected="" disabled="" hidden="" :data-length="length">＿</option>
+        <option v-if="length=='2'" value="" selected="" disabled="" hidden="" :data-length="length">＿＿</option>
+        <option v-if="length=='4'" value="" selected="" disabled="" hidden="" :data-length="length">＿＿＿＿</option>
         <!-- todo: filter by length-->
-        <option v-for="word in wordList.filter(w => w.length === parseInt(length, 10))" :value="word" :data-word="word" :disabled="isWordUsed(word)">{{ word }}</option>
+        <option v-for="word in wordList.filter(w => w.length === parseInt(length, 10))" :value="word" :data-word="word" :data-length="length" :disabled="isWordUsed(word)">{{ word }}</option>
       </select>
     </label>
   </span>
@@ -75,8 +75,8 @@ export default {
   }
   .word-selector {
     position: relative;
-    line-height: 1.2;
     display: inline-block;
+    height: 35px;
   }
   select, option {
     font-family: inherit;
@@ -92,6 +92,7 @@ export default {
     border: 0px;
     text-align: center;
     color: #45818E;
+    background-color: transparent;
   }
   select::-ms-expand {
     display: none;
@@ -100,10 +101,11 @@ export default {
     -webkit-appearance: none;
     -moz-appearance: none;
     text-align: center;
-    font-family: 'Noto Sans TC', sans-serif;background-color: transparent;
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: transparent;
   }
-  
-  [data-word='他'], [data-word='我']  {
+
+    /*[data-word='他'], [data-word='我']  {
     color: #4A2B9A;
   }
   [data-word='九月'], [data-word='時間'], [data-word='冬天']  {
@@ -114,7 +116,7 @@ export default {
   }
   [data-word='子彈'], [data-word='獵槍'], [data-word='鋼琴'], [data-word='森林']  {
     color: #2E7B30;
-  }
+  }*/
   option[disabled] {
     color: #d2d2d2;
   }

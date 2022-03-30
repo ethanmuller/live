@@ -113,28 +113,75 @@ export default {
 </script>
 
 <style>
-p {
-  margin: 0 0;
-}
-.partylink {
-  padding: 0.5rem; display: inline-block;
-}
+  p {
+    margin: 0 0;
+  }
+  .partylink {
+    padding: 0.5rem; display: inline-block;
+  }
 
-#poemcontainer {
-  width: 100%;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 36px;
-}
+  #poemcontainer {
+    width: 100%;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
 
-#poem {
-  width: 600px;
-  margin: 0 auto;
-}
-#poemcontainer p {
+  #poem {
+    margin: 0 auto;
+  }
+
+  /*
+  [data-length='1'] {
+    width: 1.5rem;
+  }
+  [data-length='2'] {
+    width: 3rem;
+  }
+  [data-length='4'] {
+    width: 6rem;
+  }
+  */
+
+  @supports (-webkit-touch-callout: none) {
+    /* CSS specific to iOS devices */
+    .word-selector {
+        margin: 0px -5px 0px -5px;
+    }
+  }
+
+  @media (min-width: 600px)
+  { /* big */
   
-}
+    #poemcontainer {
+      font-size: 2rem;
+    }
 
-.spacer {
-  height: 2rem;
-}
+    #poem {
+      width: min(90vw, 512px);
+    }
+
+    .spacer {
+      height: 2rem;
+    }
+  }
+
+  @media (max-width: 600px)
+  { /* small */
+
+    #poemcontainer {
+      font-size: 1.4rem;
+    }
+
+    #poemcontainer h1 {
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+    }
+
+    #poem {
+      width: min(90vw, 310px);
+    }
+
+    .spacer {
+      height: 1rem;
+    }
+  }
 </style>
