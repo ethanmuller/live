@@ -1,10 +1,8 @@
 <template>
   <span class="word-selector">
     <label>
-      <select @change="addWord" v-model="word" :data-length="length" :disabled="isLocked">
-        <option v-if="length=='1'" value="" selected="" disabled="" hidden="" :data-length="length">＿</option>
-        <option v-if="length=='2'" value="" selected="" disabled="" hidden="" :data-length="length">＿＿</option>
-        <option v-if="length=='4'" value="" selected="" disabled="" hidden="" :data-length="length">＿＿＿＿</option>
+      <select :data-word="word" @change="addWord" v-model="word" :data-length="length" :disabled="isLocked">
+        <option value="" selected="" disabled="" hidden="" :data-length="length"></option>
         <!-- todo: filter by length-->
         <option v-for="word in wordList.filter(w => w.length === parseInt(length, 10))" :value="word" :data-word="word" :data-length="length" :disabled="isWordUsed(word)">{{ word }}</option>
       </select>
@@ -62,26 +60,21 @@ export default {
   button {
     display: inline-block;
   }
-  .tx-smol {
-    position: absolute;
-    font-size: 0.7rem;
-    top: -0.8em;
-    left: 0;
-    width: 100%;
-    opacity: 0.3;
-  }
+
   .word-selector {
     position: relative;
     display: inline-block;
+  }
+  @supports (-webkit-touch-callout: none) {
+    /* CSS specific to iOS devices */
+    .word-selector {
+      margin: 0px -5px 0px -5px;
+    }
   }
   select, option {
     font-family: inherit;
     font-size: 1em;
   }
-  .undefined {
-    color: black;
-  }
-
   select {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -90,11 +83,15 @@ export default {
     color: #45818E;
     background: white;
     border-radius: 7px;
+    padding: 0 3px;
+    margin: 0 3px;
 
     transition: all 250ms ease-out;
   }
   select:disabled {
     background: transparent;
+    padding: 0;
+    margin: 0;
   }
   select::-ms-expand {
     display: none;

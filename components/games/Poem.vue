@@ -144,21 +144,16 @@ export default {
     font-size: 1.2rem;
     padding: 0.5em;
   }
-  @media (min-width: calc(320px + 0.5em*2)) {
+  @media (min-width: calc(336px)) {
     #poemcontainer {
+      /* this font size will grow with the browser */
       font-size: calc(0.2rem + 5vw);
     }
   }
   @media (min-width: calc(590px)) {
     #poemcontainer {
+      /* cap off font size growth */
       font-size: 2rem;
-    }
-  }
-
-  @supports (-webkit-touch-callout: none) {
-    /* CSS specific to iOS devices */
-    .word-selector {
-      margin: 0px -5px 0px -5px;
     }
   }
 </style>
