@@ -16,40 +16,26 @@
         <h1 id="title">
           填充題
         </h1>
-        <p>長頭髮的<WordSelector type='one' :wordList='wordList' :socket='socket' />住在<WordSelector type='two' :wordList='wordList' :socket='socket' />裡</p>
-        <p>討厭<WordSelector type='two' :wordList='wordList' :socket='socket' />裡強壯的<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
-        <p>笑起來像<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
-        <p>忘記的時候像<WordSelector type='two' :wordList='wordList' :socket='socket' />的<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
+        <p>長頭髮的<WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />住在<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡</p>
+        <p>討厭<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡強壯的<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>笑起來像<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>忘記的時候像<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />的<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
         <p class="spacer"></p>
-        <p>有一天<WordSelector type='one' :wordList='wordList' :socket='socket' />被<WordSelector type='two' :wordList='wordList' :socket='socket' />了</p>
-        <p><WordSelector type='one' :wordList='wordList' :socket='socket' />們不知道明天會有什麼<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
-        <p><WordSelector type='one' :wordList='wordList' :socket='socket' />在<WordSelector type='two' :wordList='wordList' :socket='socket' />裡等待著<WordSelector type='two' :wordList='wordList' :socket='socket' />出現</p>
-        <p>途中<WordSelector type='two' :wordList='wordList' :socket='socket' />死了<WordSelector type='one' :wordList='wordList' :socket='socket' />次</p>
+        <p>有一天<WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />被<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />了</p>
+        <p><WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />們不知道明天會有什麼<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p><WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />在<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡等待著<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />出現</p>
+        <p>途中<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />死了<WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />次</p>
         <p class="spacer"></p>
-        <p>幸好還有<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
-        <p><WordSelector type='one' :wordList='wordList' :socket='socket' />帶著<WordSelector type='two' :wordList='wordList' :socket='socket' />和<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
-        <p>用時間和<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
-        <p>尋回了<WordSelector type='four' :wordList='wordList' :socket='socket' />的<WordSelector type='two' :wordList='wordList' :socket='socket' /></p>
+        <p>幸好還有<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p><WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />帶著<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />和<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>用時間和<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>尋回了<WordSelector length='4' :wordList='wordList' :blankList='blankList' :socket='socket' />的<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
         <p class="spacer"></p>
         <p>那天以後</p>
-        <p>一切都<WordSelector type='four' :wordList='wordList' :socket='socket' /></p>
-        <p>可是永遠有人記得那個<WordSelector type='one' :wordList='wordList' :socket='socket' />月</p>
+        <p>一切都<WordSelector length='4' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>可是永遠有人記得那個<WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />月</p>
         <p>非常非常地冷</p>
         <p class="spacer"></p>
-      </div>
-      <div v-if="false">
-        <p>The
-          <WordSelector type='adjective' :wordList='wordList' :socket='socket' />
-          <WordSelector type='noun' :wordList='wordList' :socket='socket' />
-          <WordSelector type='verbed' :wordList='wordList' :socket='socket' />
-          the
-          <WordSelector type='adjective' :wordList='wordList' :socket='socket' />
-          <WordSelector type='noun' :wordList='wordList' :socket='socket' />
-        <p>But this caused the
-          <WordSelector type='noun' :wordList='wordList' :socket='socket' />
-          to
-          <WordSelector type='verb' :wordList='wordList' :socket='socket' />
-          <WordSelector type='adverbly' :wordList='wordList' :socket='socket' /></p>
       </div>
     </div>
 
@@ -60,7 +46,6 @@
 
 <script>
 import socket from '~/plugins/socket.io-client.js'
-//import wordList from '../../mad-lib.js'
 import wordList from '../../fei-words.js'
 
 export default {
@@ -69,56 +54,59 @@ export default {
       socket: socket,
       isMod: this.$route.query.role === 'mod',
       wordList,
+      blankList: new Array(wordList.length),
     }
   },
-  
-    mounted() {
-      this.socket.on('connect', this.connect)
-      this.socket.on('update', this.addWord)
-      this.socket.on('reset', this.reset)
-      this.socket.emit('join', (serverWordList) => {
-          this.wordList = serverWordList
-          const blanks = this.$children.filter(c => c._name === '<WordSelector>')
 
-          blanks.forEach((b,index) => {
-              Object.keys(this.wordList).forEach((g) => Object.keys(this.wordList[g]).forEach((w) => {
-                    const i = this.wordList[g][w]
-                    if (i === index) {
-                      b.setWord(w)
-                    }
-              }))
-          })
+  watch: {
+    'blankList': function() {
+      const wordSelectorComponents = this.$children.filter(c => c._name === '<WordSelector>')
+
+      wordSelectorComponents.forEach((wordSelector,index) => {
+        if (!!this.blankList[index]) {
+          wordSelector.setWord(this.blankList[index])
+        }
       })
-    },
+    }
+  },
+
+  mounted() {
+    this.socket.on('connect', this.connect)
+    this.socket.on('new state', this.setState)
+    this.socket.on('reset state', this.reset)
+    this.socket.emit('join', (serverBlankList) => {
+      this.blankList = serverBlankList
+    })
+  },
 
   beforeDestroy() {
   },
 
   methods: {
-    sendReset() {
-      this.socket.emit('reset')
+    findIndexOfInstance(self) {
+      // this is a dodgy function, but it's what we use
+      // to figure out the index this word lives at
+      return self.$parent.$children
+        .filter(c => c._name === '<WordSelector>') // Filter out other component types
+        .indexOf(this)
     },
-    reset(wordList) {
-      this.wordList = wordList;
-      const blanks = this.$children.filter(c => c._name === '<WordSelector>');
+    sendReset() {
+      this.socket.emit('reset state')
+    },
+    reset() {
+      this.blankList = new Array(wordList.length)
+      const wordSelectorComponents = this.$children.filter(c => c._name === '<WordSelector>');
 
-      blanks.forEach((b,index) => {
-        Object.keys(this.wordList).forEach((g) => Object.keys(this.wordList[g]).forEach((w) => {
-          const i = this.wordList[g][w]
-          if (i === -1) {
-            b.setWord('')
-          } else if (i === index) {
-            b.setWord(w)
-          }
-          }))
+      wordSelectorComponents.forEach((wordSelector,index) => {
+        wordSelector.setWord('')
       })
     },
     connect() {
     },
-    addWord(to, from, i, wordList) {
-      this.wordList = wordList
-      const blanks = this.$children.filter(c => c._name === '<WordSelector>')
-      blanks[i].setWord(to)
+
+    setState(serverBlankList) {
+      console.log('in serverblanklistg', serverBlankList)
+      this.blankList = serverBlankList
     }
   },
 }

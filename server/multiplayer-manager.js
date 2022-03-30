@@ -1,7 +1,5 @@
-// note we are importing the default state of data from this file
-// but it is mutated over the program's lifetime
-//let wordList = require('../mad-lib.js')
 let wordList = require('../fei-words.js')
+let blankList = new Array(wordList.length)
 
 function deepCopy(data) {
   return JSON.parse(JSON.stringify(data))
@@ -15,43 +13,53 @@ export default function(socketInstance) {
   io = socketInstance
 
   function reset() {
-    wordList = deepCopy(originalWordList)
-    io.emit('reset', wordList)
+    console.log('RESET ')
+    blankList = new Array(wordList.length)
+    io.emit('reset state')
   }
 
   socketInstance.on('connection', (socket) => {
     console.log('HELLO ', socket.id)
 
     socket.on('join', function (cb) {
-      cb(wordList)
+      cb(blankList)
     })
 
-    socket.on('reset', reset)
+    socket.on('reset state', reset)
 
-    socket.on('update', function (to,from,indexOfBlank, callback) {
-     console.log('WORD  ', socket.id, ': ', to, from)
+    socket.on('submit word', function (to,from,indexOfBlank, callback) {
+      console.log('WORD  ', socket.id, ': ', to, from)
 
-      Object.keys(wordList).forEach((g) => Object.keys(wordList[g]).forEach(w => {
-        if (w === to) {
+      const word = to
 
-          if (wordList[g][w] !== -1) {
-            return callback({ err: 'word already in use' })
-          }
+      // make sure word isn't already used
+      if (blankList.indexOf(word) > -1) {
+        const err = { err: 'word already in use' }
+        console.error(err)
+        return callback(err)
+      }
 
-          // mark word as used
-          wordList[g][w] = indexOfBlank
+      // make sure blank isn't already filled
+      if (!!blankList[indexOfBlank]) {
+        const err = { err: 'something is already in that blank' }
+        console.error(err)
+        return callback(err)
+      }
 
-          // free up word
+      // mark word as used
+      blankList[indexOfBlank] = word
 
-          // tell everybody about the new selected word
-          socket.broadcast.emit('update', to, from, indexOfBlank, wordList, socket.id)
+      // free up word we changed from if it was used already
+      const fromIndex = blankList.indexOf(from)
+      if (fromIndex > -1) {
+        blankList[fromIndex] = null
+      }
 
-          // we don't use this callback to send data,
-          // just so they can stop waiting to hear back
-          // in case of an error
-          return callback()
-        }
-      }))
+      // tell everybody about the new selected word
+      console.log(blankList)
+      socket.emit('new state', blankList)
+      socket.broadcast.emit('new state', blankList)
+      return callback()
     })
 
     socket.on('disconnect', function (fn) {

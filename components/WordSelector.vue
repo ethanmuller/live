@@ -4,11 +4,12 @@
       <!--<span class="tx-smol">
         {{ type }}
       </span>-->
-      <select @change="addWord" v-model="word" :data-word="word">
-        <option v-if="type=='one'" value="" selected="" disabled="" hidden="">＿</option>
-        <option v-if="type=='two'" value="" selected="" disabled="" hidden="">＿＿</option>
-        <option v-if="type=='four'" value="" selected="" disabled="" hidden="">＿＿＿＿</option>
-        <option v-for="availability, word in wordList[type]" :disabled="isWordUsed(word)" :value="word" :data-word="word">{{ word }}</option>
+      <select @change="addWord" v-model="word" :data-word="word" :disabled="word !== ''">
+        <option v-if="length=='1'" value="" selected="" disabled="" hidden="">＿</option>
+        <option v-if="length=='2'" value="" selected="" disabled="" hidden="">＿＿</option>
+        <option v-if="length=='4'" value="" selected="" disabled="" hidden="">＿＿＿＿</option>
+        <!-- todo: filter by length-->
+        <option v-for="word in wordList.filter(w => w.length === parseInt(length, 10))" :value="word" :data-word="word" :disabled="isWordUsed(word)">{{ word }}</option>
       </select>
     </label>
   </span>
@@ -16,7 +17,7 @@
 
 <script>
 export default {
-  props: ['type', 'wordList', 'socket'],
+  props: ['length', 'wordList', 'blankList', 'socket'],
   data() {
     return {
       word: "",
@@ -29,33 +30,29 @@ export default {
     },
   },
   methods: {
+    isWordUsed(word) {
+      return this.blankList.indexOf(word) > -1
+    },
     setWord(word) {
       this.word = word
     },
     findIndexOfInstance(self) {
       // this is a dodgy function, but it's what we use
-      // to figure out which Nth word this component represents
+      // to figure out the index this word lives at
       return self.$parent.$children
-        .filter(c => c._name === '<WordSelector>')
+        .filter(c => c._name === '<WordSelector>') // Filter out other component types
         .indexOf(this)
-    },
-    isWordUsed(word) {
-      let allWords = []
-
-      Object.keys(this.wordList).forEach((g) => Object.keys(this.wordList[g]).forEach(w => {
-        if (w === word) {
-        }
-      }))
-
-      return allWords.indexOf(word) > -1
     },
     addWord(e) {
       const i = this.findIndexOfInstance(this)
       const to = this.word
       const from = this.pastWords[0]
-      this.socket.emit('update', to, from, i, (err) => {
+      console.log('submitting word', this.word)
+
+      this.socket.emit('submit word', to, from, i, (err) => {
         if (err) {
           // revert back to previous state
+          alert(err.err)
           this.word = from
         }
       })
