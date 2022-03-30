@@ -11,7 +11,6 @@
     </div>
     
     <div id="poemcontainer">
-      <div id="poem">
         <h1 id="title">
           填充題
         </h1>
@@ -35,7 +34,6 @@
         <p>可是永遠有人記得那個<WordSelector :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />月</p>
         <p>非常非常地冷</p>
         <p class="spacer"></p>
-      </div>
     </div>
 
     <NuxtLink :to="{ path: '/', query: this.$route.query }" v-if="isMod" class="partylink">&lt;- Party Index</NuxtLink>
@@ -140,66 +138,27 @@ export default {
   #poemcontainer {
     width: 100%;
     font-family: 'Noto Sans TC', sans-serif;
-  }
+    max-width: 18em;
+    line-height: 1.7;
 
-  #poem {
-    margin: 0 auto;
+    font-size: 1.2rem;
+    padding: 0.5em;
   }
-
-  /*
-  [data-length='1'] {
-    width: 1.5rem;
+  @media (min-width: calc(320px + 0.5em*2)) {
+    #poemcontainer {
+      font-size: calc(0.2rem + 5vw);
+    }
   }
-  [data-length='2'] {
-    width: 3rem;
+  @media (min-width: calc(590px)) {
+    #poemcontainer {
+      font-size: 2rem;
+    }
   }
-  [data-length='4'] {
-    width: 6rem;
-  }
-  */
 
   @supports (-webkit-touch-callout: none) {
     /* CSS specific to iOS devices */
     .word-selector {
-        margin: 0px -5px 0px -5px;
-    }
-  }
-
-  @media (min-width: 600px)
-  { /* big */
-  
-    #poemcontainer {
-      font-size: 2rem;
-      line-height: 1.7;
-    }
-
-    #poem {
-      width: min(90vw, 512px);
-    }
-
-    .spacer {
-      height: 2rem;
-    }
-  }
-
-  @media (max-width: 600px)
-  { /* small */
-
-    #poemcontainer {
-      font-size: 1.4rem;
-    }
-
-    #poemcontainer h1 {
-      font-size: 2.5rem;
-      margin-bottom: 8px;
-    }
-
-    #poem {
-      width: min(90vw, 310px);
-    }
-
-    .spacer {
-      height: 1rem;
+      margin: 0px -5px 0px -5px;
     }
   }
 </style>

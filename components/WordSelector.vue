@@ -89,6 +89,9 @@ export default {
     text-align: center;
     color: #45818E;
     background: white;
+    border-radius: 7px;
+
+    transition: all 250ms ease-out;
   }
   select:disabled {
     background: transparent;
@@ -104,19 +107,26 @@ export default {
     background-color: transparent;
   }
 
-    /*[data-word='他'], [data-word='我']  {
+  [disabled] {
+  }
+  [data-word='他'],
+  [data-word='我']  {
     color: #4A2B9A;
   }
-  [data-word='九月'], [data-word='時間'], [data-word='冬天']  {
+  [data-word='九月'],
+  [data-word='時間'],
+  [data-word='冬天']  {
     color: #BE9D57;
   }
-  [data-word='遺忘'], [data-word='弄丟'], [data-word='原諒']  {
+  [data-word='遺忘'],
+  [data-word='弄丟'],
+  [data-word='原諒']  {
     color: #A8214C;
   }
-  [data-word='子彈'], [data-word='獵槍'], [data-word='鋼琴'], [data-word='森林']  {
+  [data-word='子彈'],
+  [data-word='獵槍'],
+  [data-word='鋼琴'],
+  [data-word='森林']  {
     color: #2E7B30;
-  }*/
-  option[disabled] {
-    color: #d2d2d2;
   }
 </style>
