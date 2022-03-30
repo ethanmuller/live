@@ -1,10 +1,7 @@
 <template>
   <span class="word-selector">
     <label>
-      <!--<span class="tx-smol">
-        {{ type }}
-      </span>-->
-      <select @change="addWord" v-model="word" :data-length="length">
+      <select @change="addWord" v-model="word" :data-length="length" :disabled="isLocked">
         <option v-if="length=='1'" value="" selected="" disabled="" hidden="" :data-length="length">＿</option>
         <option v-if="length=='2'" value="" selected="" disabled="" hidden="" :data-length="length">＿＿</option>
         <option v-if="length=='4'" value="" selected="" disabled="" hidden="" :data-length="length">＿＿＿＿</option>
@@ -17,7 +14,7 @@
 
 <script>
 export default {
-  props: ['length', 'wordList', 'blankList', 'socket'],
+  props: ['length', 'wordList', 'blankList', 'socket', 'isLocked'],
   data() {
     return {
       word: "",
@@ -76,7 +73,6 @@ export default {
   .word-selector {
     position: relative;
     display: inline-block;
-    height: 35px;
   }
   select, option {
     font-family: inherit;
@@ -92,7 +88,10 @@ export default {
     border: 0px;
     text-align: center;
     color: #45818E;
-    background-color: transparent;
+    background: white;
+  }
+  select:disabled {
+    background: transparent;
   }
   select::-ms-expand {
     display: none;

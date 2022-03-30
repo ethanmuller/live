@@ -11,29 +11,28 @@
     </div>
     
     <div id="poemcontainer">
-      {{isLocked}}
       <div id="poem">
         <h1 id="title">
           填充題
         </h1>
-        <p>長頭髮的<WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />住在<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡</p>
-        <p>討厭<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡強壯的<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
-        <p>笑起來像<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
-        <p>忘記的時候像<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />的<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>長頭髮的<WordSelector :isLocked="isLocked" length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />住在<WordSelector :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡</p>
+        <p>討厭<WordSelector :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡強壯的<WordSelector :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>笑起來像<WordSelector :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>忘記的時候像<WordSelector :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />的<WordSelector :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
         <p class="spacer"></p>
-        <p>有一天<WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />被<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />了</p>
-        <p><WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />們不知道明天會有什麼<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
-        <p><WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />在<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡等待著<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />出現</p>
-        <p>途中<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />死了<WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />次</p>
+        <p>有一天<WordSelector :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />被<WordSelector :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />了</p>
+        <p><WordSelector :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />們不知道明天會有什麼<WordSelector :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p><WordSelector :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />在<WordSelector :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡等待著<WordSelector :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />出現</p>
+        <p>途中<WordSelector :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />死了<WordSelector :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />次</p>
         <p class="spacer"></p>
-        <p>幸好還有<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
-        <p><WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />帶著<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />和<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
-        <p>用時間和<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
-        <p>尋回了<WordSelector length='4' :wordList='wordList' :blankList='blankList' :socket='socket' />的<WordSelector length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>幸好還有<WordSelector :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p><WordSelector :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />帶著<WordSelector :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />和<WordSelector :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>用時間和<WordSelector :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>尋回了<WordSelector :isLocked="isLocked"length='4' :wordList='wordList' :blankList='blankList' :socket='socket' />的<WordSelector :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
         <p class="spacer"></p>
         <p>那天以後</p>
-        <p>一切都<WordSelector length='4' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
-        <p>可是永遠有人記得那個<WordSelector length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />月</p>
+        <p>一切都<WordSelector :isLocked="isLocked"length='4' :wordList='wordList' :blankList='blankList' :socket='socket' /></p>
+        <p>可是永遠有人記得那個<WordSelector :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />月</p>
         <p>非常非常地冷</p>
         <p class="spacer"></p>
       </div>
@@ -171,6 +170,7 @@ export default {
   
     #poemcontainer {
       font-size: 2rem;
+      line-height: 1.7;
     }
 
     #poem {
