@@ -1,5 +1,9 @@
 let wordList = require('../fei-words.js')
-let blankList = new Array(wordList.length)
+
+let state = {
+  blankList: new Array(wordList.length),
+  isLocked: false,
+}
 
 function deepCopy(data) {
   return JSON.parse(JSON.stringify(data))
@@ -12,20 +16,36 @@ export let io = null;
 export default function(socketInstance) {
   io = socketInstance
 
-  function reset() {
-    console.log('RESET ')
-    blankList = new Array(wordList.length)
-    io.emit('reset state')
-  }
-
   socketInstance.on('connection', (socket) => {
     console.log('HELLO ', socket.id)
 
     socket.on('join', function (cb) {
-      cb(blankList)
+      cb(state)
     })
 
-    socket.on('reset state', reset)
+    socket.on('send reset', () => {
+      console.log('RESET ')
+
+      state.blankList = new Array(wordList.length)
+      state.isLocked = false
+
+      socket.emit('new state', state)
+      socket.broadcast.emit('new state', state)
+    })
+
+    socket.on('lock state', () => {
+      console.log('LOCK  ', socket.id)
+      state.isLocked = true
+      socket.emit('new state', state)
+      socket.broadcast.emit('new state', state)
+    })
+
+    socket.on('unlock state', () => {
+      console.log('UNLOCK ', socket.id)
+      state.isLocked = false
+      socket.emit('new state', state)
+      socket.broadcast.emit('new state', state)
+    })
 
     socket.on('submit word', function (to,from,indexOfBlank, callback) {
       console.log('WORD  ', socket.id, ': ', to, from)
@@ -33,25 +53,24 @@ export default function(socketInstance) {
       const word = to
 
       // make sure word isn't already used
-      if (blankList.indexOf(word) > -1) {
+      if (state.blankList.indexOf(word) > -1) {
         const err = { err: 'word already in use' }
         console.error(err)
         return callback(err)
       }
 
       // mark word as used
-      blankList[indexOfBlank] = word
+      state.blankList[indexOfBlank] = word
 
       // free up word we changed from if it was used already
-      const fromIndex = blankList.indexOf(from)
+      const fromIndex = state.blankList.indexOf(from)
       if (fromIndex > -1) {
-        blankList[fromIndex] = null
+        state.blankList[fromIndex] = null
       }
 
       // tell everybody about the new selected word
-      console.log(blankList)
-      socket.emit('new state', blankList)
-      socket.broadcast.emit('new state', blankList)
+      socket.emit('new state', state)
+      socket.broadcast.emit('new state', state)
       return callback()
     })
 

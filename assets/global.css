@@ -270,11 +270,6 @@ input[type="text"] {
   margin-left: 0.5rem;
 }
 
-.host-note {
-  align-self: flex-end;
-  padding-right: 2.5rem;
-}
-
 input {
   display: block;
 }
@@ -299,4 +294,5 @@ input {
 }
 .mod-panel__controls {
   display: flex;
+  gap: 1rem;
 }

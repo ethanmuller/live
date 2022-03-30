@@ -4,14 +4,14 @@
     <div class="mod-panel" v-if="isMod">
       <span class="mod-panel__title">Mod Panel</span>
       <div class="mod-panel__controls">
-        <div class="host-note">
-          <button @click="sendReset()" class="btn btn--mod">Reset Poem</button>
-        </div>
-        <!--<div class="host-note"><button @click="endPartyButton()" class="btn btn--mod">End Party</button></div>-->
+        <button v-if="!isLocked" @click="sendLock()" class="btn btn--mod">🔒 Lock Poem</button>
+        <button v-if="isLocked" @click="sendUnlock()" class="btn btn--mod">🔓 Unlock Poem</button>
+        <button @click="offerReset()" class="btn btn--mod">🔄 Reset Poem</button>
       </div>
     </div>
     
     <div id="poemcontainer">
+      {{isLocked}}
       <div id="poem">
         <h1 id="title">
           填充題
@@ -55,16 +55,23 @@ export default {
       isMod: this.$route.query.role === 'mod',
       wordList,
       blankList: new Array(wordList.length),
+      isLocked: false,
     }
   },
 
   watch: {
-    'blankList': function() {
+    'blankList': function(blankList) {
+      // whenever blankList changes,
+      // we programatically update each WordSelector component
+      // to reflect the newly received list of what words are in which slots
+
       const wordSelectorComponents = this.$children.filter(c => c._name === '<WordSelector>')
 
       wordSelectorComponents.forEach((wordSelector,index) => {
-        if (!!this.blankList[index]) {
-          wordSelector.setWord(this.blankList[index])
+        if (!!blankList[index]) {
+          wordSelector.setWord(blankList[index])
+        } else {
+          wordSelector.setWord('')
         }
       })
     }
@@ -73,9 +80,9 @@ export default {
   mounted() {
     this.socket.on('connect', this.connect)
     this.socket.on('new state', this.setState)
-    this.socket.on('reset state', this.reset)
-    this.socket.emit('join', (serverBlankList) => {
-      this.blankList = serverBlankList
+    this.socket.emit('join', (state) => {
+      this.blankList = state.blankList
+      this.isLocked = state.isLocked
     })
   },
 
@@ -90,8 +97,19 @@ export default {
         .filter(c => c._name === '<WordSelector>') // Filter out other component types
         .indexOf(this)
     },
+    offerReset() {
+      if (confirm('Are you sure you want to reset everything?')) {
+        this.sendReset()
+      }
+    },
     sendReset() {
-      this.socket.emit('reset state')
+      this.socket.emit('send reset')
+    },
+    sendLock() {
+      this.socket.emit('lock state')
+    },
+    sendUnlock() {
+      this.socket.emit('unlock state')
     },
     reset() {
       this.blankList = new Array(wordList.length)
@@ -104,9 +122,9 @@ export default {
     connect() {
     },
 
-    setState(serverBlankList) {
-      console.log('in serverblanklistg', serverBlankList)
-      this.blankList = serverBlankList
+    setState(newState) {
+      this.blankList = newState.blankList
+      this.isLocked = newState.isLocked
     }
   },
 }
