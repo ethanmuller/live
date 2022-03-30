@@ -122,13 +122,15 @@ p {
 
 #poemcontainer {
   width: 100%;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 36px;
+  font-size: 20px;
+  padding: 1.5rem;
+  max-width: 18em;
+  font-size: calc(5px + 4vw);
 }
-
-#poem {
-  width: 600px;
-  margin: 0 auto;
+@media (min-width: 35em) {
+  #poemcontainer {
+    font-size: 36px;
+  }
 }
 #poemcontainer p {
   
