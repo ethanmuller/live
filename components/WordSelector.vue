@@ -81,7 +81,7 @@ export default {
     -moz-appearance: none;
     border: 0px;
     text-align: center;
-    color: #45818E;
+    color: #000;
     background: white;
     border-radius: 7px;
     padding: 0 3px;
@@ -105,26 +105,7 @@ export default {
     background-color: transparent;
   }
 
-  [disabled] {
-  }
-  [data-word='他'],
-  [data-word='我']  {
-    color: #4A2B9A;
-  }
-  [data-word='九月'],
-  [data-word='時間'],
-  [data-word='冬天']  {
-    color: #BE9D57;
-  }
-  [data-word='遺忘'],
-  [data-word='弄丟'],
-  [data-word='原諒']  {
-    color: #A8214C;
-  }
-  [data-word='子彈'],
-  [data-word='獵槍'],
-  [data-word='鋼琴'],
-  [data-word='森林']  {
-    color: #2E7B30;
+  option[disabled] {
+    color: #ddd;
   }
 </style>
