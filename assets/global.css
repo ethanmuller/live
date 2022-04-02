@@ -52,6 +52,7 @@ h1, h2 {
 }
 
 button {
+  font-family: inherit;
   font-size: inherit;
   display: block;
   border: none;

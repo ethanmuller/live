@@ -120,6 +120,7 @@ export default {
     },
 
     setState(newState) {
+    console.log('got new state: ', newState)
       this.blankList = newState.blankList
       this.isLocked = newState.isLocked
     }

@@ -33,6 +33,13 @@ export default function(socketInstance) {
       socket.broadcast.emit('new state', state)
     })
 
+    socket.on('open word selector', (i) => {
+      state.blankList[i] = socket.id
+
+      socket.emit('new state', state)
+      socket.broadcast.emit('new state', state)
+    })
+
     socket.on('lock state', () => {
       console.log('LOCK  ', socket.id)
       state.isLocked = true
