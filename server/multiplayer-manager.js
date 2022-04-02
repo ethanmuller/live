@@ -19,6 +19,22 @@ export default function(socketInstance) {
   socketInstance.on('connection', (socket) => {
     console.log('HELLO ', socket.id)
 
+    function closeWordSelector() {
+      let index = state.blankList.indexOf(socket.id)
+
+      if (index === -1) {
+        return
+      }
+
+      while (index !== -1) {
+        state.blankList[index] = null
+        index = state.blankList.indexOf(socket.id)
+      }
+
+      socket.emit('new state', state)
+      socket.broadcast.emit('new state', state)
+    }
+
     socket.on('join', function (cb) {
       cb(state)
     })
@@ -32,6 +48,19 @@ export default function(socketInstance) {
       socket.emit('new state', state)
       socket.broadcast.emit('new state', state)
     })
+
+    socket.on('open word selector', (i) => {
+      if (state.blankList.indexOf(socket.id) > -1) {
+        closeWordSelector()
+      }
+
+      state.blankList[i] = socket.id
+
+      socket.emit('new state', state)
+      socket.broadcast.emit('new state', state)
+    })
+
+    socket.on('close word selector', closeWordSelector)
 
     socket.on('lock state', () => {
       console.log('LOCK  ', socket.id)
@@ -75,6 +104,7 @@ export default function(socketInstance) {
     })
 
     socket.on('disconnect', function (fn) {
+      closeWordSelector()
       console.log('BYE!  ', socket.id)
     })
   })

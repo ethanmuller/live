@@ -52,11 +52,13 @@ h1, h2 {
 }
 
 button {
+  font-family: inherit;
   font-size: inherit;
   display: block;
   border: none;
   background: transparent;
   padding: 0;
+  line-height: inherit;
 }
 
 select, option {
