@@ -1,8 +1,12 @@
 <template>
   <span>
-    <span v-if="isLocked">{{ word }}</span>
-    <span v-if="!isLocked" class="word-selector">
-      <button @click="editBlank">{{ word || "＿".repeat(parseInt(length, 10)) }}</button>
+    <span v-bind:class="{
+    'word-selector': true,
+    'word-selector--is-being-edited': isBeingEdited,
+    }">
+      <button v-if="!isLocked && !isBeingEdited" @click="editBlank"> {{ underscores }} </button>
+      <span v-else-if="isBeingEdited">{{ word || underscores }}</span>
+      <span v-else>{{ word || underscores }}</span>
     </span>
   </span>
 </template>
@@ -21,9 +25,20 @@ export default {
       this.pastWords.unshift(to)
     },
   },
+  computed: {
+    "underscores": function() {
+      return "＿".repeat(parseInt(this.length, 10))
+    },
+    "isBeingEdited": function() {
+      const i = this.findIndexOfInstance(this)
+      console.log(this.blankList[i] && this.blankList[i].length)
+      return this.blankList[i] && this.blankList[i].length === 20
+    },
+  },
   methods: {
     editBlank() {
       const i = this.findIndexOfInstance(this)
+      console.log('editing')
       this.socket.emit('open word selector', i)
     },
     isWordUsed(word) {
@@ -65,6 +80,22 @@ export default {
   .word-selector {
     position: relative;
     display: inline-block;
+    transition: all 250ms ease-out;
+    opacity: 1;
+  }
+
+  @keyframes blink {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .word-selector--is-being-edited {
+    background: #aaa;
+    color: transparent;
+    animation: blink 500ms infinite alternate;
   }
   @supports (-webkit-touch-callout: none) {
     /* CSS specific to iOS devices */
@@ -87,7 +118,6 @@ export default {
     padding: 0 3px;
     margin: 0 3px;
 
-    transition: all 250ms ease-out;
   }
   select:disabled {
     background: transparent;
