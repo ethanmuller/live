@@ -20,13 +20,16 @@ export default function(socketInstance) {
     console.log('HELLO ', socket.id)
 
     function closeWordSelector() {
-      const index = state.blankList.indexOf(socket.id) === -1
+      let index = state.blankList.indexOf(socket.id)
 
       if (index === -1) {
         return
       }
 
-      state.blankList[index] = null
+      while (index !== -1) {
+        state.blankList[index] = null
+        index = state.blankList.indexOf(socket.id)
+      }
 
       socket.emit('new state', state)
       socket.broadcast.emit('new state', state)
@@ -97,6 +100,7 @@ export default function(socketInstance) {
     })
 
     socket.on('disconnect', function (fn) {
+      closeWordSelector()
       console.log('BYE!  ', socket.id)
     })
   })
