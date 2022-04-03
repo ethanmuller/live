@@ -19,6 +19,19 @@ export default function(socketInstance) {
   socketInstance.on('connection', (socket) => {
     console.log('HELLO ', socket.id)
 
+    function closeWordSelector() {
+      const index = state.blankList.indexOf(socket.id) === -1
+
+      if (index === -1) {
+        return
+      }
+
+      state.blankList[index] = null
+
+      socket.emit('new state', state)
+      socket.broadcast.emit('new state', state)
+    }
+
     socket.on('join', function (cb) {
       cb(state)
     })
@@ -39,6 +52,8 @@ export default function(socketInstance) {
       socket.emit('new state', state)
       socket.broadcast.emit('new state', state)
     })
+
+    socket.on('close word selector', closeWordSelector)
 
     socket.on('lock state', () => {
       console.log('LOCK  ', socket.id)
