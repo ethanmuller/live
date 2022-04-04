@@ -139,7 +139,7 @@ export default {
     line-height: 1.7;
 
     font-size: 1.2rem;
-    padding: 0.5em;
+    padding: 0.5em 0.5em 9em;
   }
   @media (min-width: calc(336px)) {
     #poemcontainer {

@@ -4,7 +4,7 @@
     'word-selector': true,
     'word-selector--is-being-edited': isBeingEdited,
     'word-selector--is-being-edited-by-me': isBeingEditedByMe,
-    }"><button v-if="!isLocked && !isBeingEdited" @click="openWordList">{{ underscores }}</button><span v-else>{{ word || underscores }}</span></span><div v-if="isBeingEditedByMe" class="word-list"><button v-for="word in wordList">{{word}}</button></div>
+    }"><button v-if="!isLocked && !isBeingEdited" @click="openWordList">{{ underscores }}</button><span v-else>{{ word || underscores }}</span></span><div v-if="isBeingEditedByMe" class="word-list"><div v-bind:class="[lengthClass]"><button v-for="word in wordList.filter(w => w.length === parseInt(length, 10))">{{word}}</button></div></div>
   </span>
 </template>
 
@@ -16,6 +16,7 @@ export default {
       word: "",
       pastWords: [],
       isWordListOpen: false,
+      lengthClass: `word-group word-group--length-${this.length}`,
     }
   },
   watch: {
@@ -163,12 +164,33 @@ export default {
     top: 100%;
     left: 50%;
     z-index: 1;
-
-    width: 5em;
-    display: flex;
-    flex-direction: column;
     transform: translate3d(-50%,0,0);
+  }
 
+  .word-group {
+    text-align: center;
+  }
+  .word-group {
+  }
+  .word-group--length-1 {
+    width: 8.5em;
+  }
+  .word-group--length-2 {
+    width: 11.5em;
+    font-size: 0.9em;
+  }
+  .word-group--length-4 {
+  }
+  .word-group--length-1 button {
+    width: 2em;
+    height: 2.2em;
+  }
+  .word-group--length-2 button {
+    width: 2.7em;
+    height: 2.2em;
+  }
+  .word-group--length-4 button {
+    width: 4.5em;
   }
 
 
