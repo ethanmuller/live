@@ -4,7 +4,7 @@
     'word-selector': true,
     'word-selector--is-being-edited': isBeingEdited,
     'word-selector--is-being-edited-by-me': isBeingEditedByMe,
-    }"><button v-if="!isLocked && !isBeingEdited" @click="openWordList">{{ underscores }}</button><span v-else>{{ word || underscores }}</span></span><div v-if="isBeingEditedByMe" class="word-list">ayye<button @click="closeWordList">done</button></div>
+    }"><button v-if="!isLocked && !isBeingEdited" @click="openWordList">{{ underscores }}</button><span v-else>{{ word || underscores }}</span></span><div v-if="isBeingEditedByMe" class="word-list"><button v-for="word in wordList">{{word}}</button></div>
   </span>
 </template>
 
@@ -161,8 +161,14 @@ export default {
     border-radius: 7px;
     position: absolute;
     top: 100%;
-    left: 0;
+    left: 50%;
     z-index: 1;
+
+    width: 5em;
+    display: flex;
+    flex-direction: column;
+    transform: translate3d(-50%,0,0);
+
   }
 
 
