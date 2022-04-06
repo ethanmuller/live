@@ -11,6 +11,8 @@
     </div>
     
     <div id="poemcontainer">
+	<canvas ref="canvas"></canvas>
+
         <h1 id="title">
           填充題
         </h1>
@@ -49,6 +51,7 @@
 </template>
 
 <script>
+import QRCode from 'qrcode'
 import socket from '~/plugins/socket.io-client.js'
 import wordList from '../../fei-words.js'
 
@@ -61,6 +64,7 @@ export default {
       wordList,
       blankList: new Array(wordList.length),
       isLocked: false,
+      url: '',
 
       // Only one WordSelector is allowed open at a time.
       // This represents the index of the one that's open.
@@ -87,6 +91,22 @@ export default {
   },
 
   mounted() {
+    this.url = window.location.protocol + '//' + window.location.host + window.location.pathname
+    const canvas = this.$refs.canvas
+
+
+    QRCode.toCanvas(canvas, this.url, {
+      scale: 8,
+      margin: 0,
+      color: {
+        dark: '#000',  // Blue dots
+        light: '#0000' // Transparent background
+      }
+    }, function (error) {
+      if (error) console.error(error)
+      console.log('success!');
+    })
+
     this.socket.on('connect', this.connect)
     this.socket.on('new state', this.setState)
     this.socket.emit('join', (state) => {
@@ -145,6 +165,16 @@ export default {
 </script>
 
 <style>
+  canvas {
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    width: 3.7em !important;
+    height: auto !important;
+    padding: 0.5em;
+    background: white;
+  }
   p {
     margin: 0 0 2rem;
   }
