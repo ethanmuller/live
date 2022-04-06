@@ -166,9 +166,15 @@ export default {
 
 <style>
   canvas {
-    position: fixed;
+    /* using sticky instead of absolute
+    so it doesn't cover mod bar */
+    position: sticky;
     top: 0;
     right: 0;
+    float: right;
+
+    margin-top: -0.5em;
+    margin-right: -0.5em;
 
     width: 3.7em !important;
     height: auto !important;
