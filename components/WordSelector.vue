@@ -12,7 +12,7 @@
     'word-selector': true,
     'word-selector--is-being-edited': isBeingEdited,
     'word-selector--is-being-edited-by-me': isBeingEditedByMe,
-    }"><button v-if="!isLocked && !isBeingEdited" @click="openWordList">{{ word || underscores }}</button><button @click="closeWordList" v-else>{{ word || underscores }}</button></span><div v-if="isBeingEditedByMe" v-bind:class="['word-list', anchor ? `word-list--anchor-${anchor}` : null,]"><div v-bind:class="[lengthClass]"><button v-for="word in wordList.filter(w => w.length === parseInt(length, 10))" @click="submitWord" :disabled="isWordUsed(word)">{{word}}</button></div></div>
+    }"><button v-if="!isLocked && !isBeingEdited" @click="openWordList" :class="{ 'word-present': !!word }">{{ word || underscores }}</button><button @click="closeWordList" v-else>{{ word || underscores }}</button></span><div v-if="isBeingEditedByMe" v-bind:class="['word-list', anchor ? `word-list--anchor-${anchor}` : null,]"><div v-bind:class="[lengthClass]"><button v-for="word in wordList.filter(w => w.length === parseInt(length, 10))" @click="submitWord" :disabled="isWordUsed(word)">{{word}}</button></div></div>
   </span>
 </template>
 
@@ -109,6 +109,10 @@ export default {
     display: inline-block;
     opacity: 1;
     line-height: 1;
+  }
+
+  .word-present {
+    color: #45818E;
   }
 
   @keyframes blink {
