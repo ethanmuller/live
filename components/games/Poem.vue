@@ -9,8 +9,8 @@
       </div>
     </div>
     
-    <div id="poemcontainer" v-if="isConnected">
-	<div class="poem-container__a"><canvas ref="canvas" @click="toggleScreenMode" class="qr"></canvas></div>
+    <div class="poem-container" v-if="isConnected">
+	<div class="poem-container__a"><canvas ref="qrcanvas" @click="toggleScreenMode" class="qr"></canvas></div>
 
         <div class="poem-container__b">
           <h1 id="title">
@@ -94,10 +94,10 @@ export default {
 
   mounted() {
     this.url = window.location.protocol + '//' + window.location.host + window.location.pathname
-    const canvas = this.$refs.canvas
+    const qrcanvas = this.$refs.qrcanvas
+     
 
-
-    QRCode.toCanvas(canvas, this.url, {
+    QRCode.toCanvas(qrcanvas, this.url, {
       scale: 8,
       margin: 0,
       color: {
@@ -106,7 +106,7 @@ export default {
       }
     }, function (error) {
       if (error) console.error(error)
-      console.log('success!');
+      console.log('done drawing qr code');
     })
 
     this.socket.on('connect', this.connect)
