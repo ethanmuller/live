@@ -9,10 +9,10 @@
       </div>
     </div>
     
-    <div class="poem-container" v-if="isConnected">
+    <div class="poem-container">
 	<div class="poem-container__a"><canvas ref="qrcanvas" @click="toggleScreenMode" class="qr"></canvas></div>
 
-        <div class="poem-container__b">
+        <div class="poem-container__b" v-if="isConnected">
           <h1 id="title">
             填充題
           </h1>
@@ -122,7 +122,6 @@ export default {
 
   methods: {
     toggleScreenMode() {
-      alert('ok!')
     },
     wordSelectorOpen(i) {
     },
