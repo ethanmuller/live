@@ -10,7 +10,7 @@
       </div>
     </div>
     
-    <div id="poemcontainer">
+    <div id="poemcontainer" v-if="isConnected">
 	<canvas ref="canvas"></canvas>
 
         <h1 id="title">
@@ -65,6 +65,7 @@ export default {
       blankList: new Array(wordList.length),
       isLocked: false,
       url: '',
+      isConnected: false,
 
       // Only one WordSelector is allowed open at a time.
       // This represents the index of the one that's open.
@@ -154,6 +155,7 @@ export default {
       })
     },
     connect() {
+      this.isConnected = true
     },
 
     setState(newState) {
