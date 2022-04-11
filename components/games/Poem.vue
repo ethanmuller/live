@@ -18,7 +18,7 @@
         </h1>
 
 
-        <div v-if="isConnected">
+        <div>
           <p>
             <span>長頭髮的<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose"  :isLocked="isLocked" length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />住在<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡</span>
             <span>討厭<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡強壯的<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
@@ -67,7 +67,6 @@ export default {
       blankList: new Array(wordList.length),
       isLocked: false,
       url: '',
-      isConnected: false,
 
       // Only one WordSelector is allowed open at a time.
       // This represents the index of the one that's open.
@@ -122,6 +121,9 @@ export default {
   },
 
   methods: {
+    connect() {
+      console.log('connected')
+    },
     wordSelectorOpen(i) {
     },
     wordSelectorClose() {
@@ -155,9 +157,6 @@ export default {
       wordSelectorComponents.forEach((wordSelector,index) => {
         wordSelector.setWord('')
       })
-    },
-    connect() {
-      this.isConnected = true
     },
 
     setState(newState) {
