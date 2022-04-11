@@ -41,7 +41,7 @@ export default {
       // todo: move this method out of computed property.
       // maybe calculate index on mount instead?
       const i = this.findIndexOfInstance(this)
-      return this.blankList[i] === this.socket.id
+      return this.blankList[i] === this.socket.id && typeof this.socket.id !== 'undefined'
     },
     "isBeingEdited": function() {
       // todo: move this method out of computed property.
