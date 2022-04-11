@@ -10,7 +10,7 @@
       </div>
     </div>
     
-    <div id="poemcontainer" v-if="isConnected">
+    <div id="poemcontainer">
 	<canvas ref="canvas"></canvas>
 
         <h1 id="title">
@@ -18,30 +18,32 @@
         </h1>
 
 
-        <p>
-          <span>長頭髮的<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose"  :isLocked="isLocked" length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />住在<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡</span>
-          <span>討厭<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡強壯的<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
-          <span>笑起來像<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
-          <span>忘記的時候像<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />的<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" anchor="right" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
-        </p>
-        <p>
-          <span>有一天<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />被<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />了</span>
-          <span><WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />們不知道明天會有什麼<WordSelector anchor="right" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
-          <span><WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />在<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡等待著<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />出現</span>
-          <span>途中<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />死了<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />次</span>
-        </p>
-        <p>
-          <span>幸好還有<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
-          <span><WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />帶著<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />和<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
-          <span>用時間和<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
-          <span>尋回了<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='4' :wordList='wordList' :blankList='blankList' :socket='socket' />的<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
-        </p>
-        <p>
-          <span>那天以後</span>
-          <span>一切都<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='4' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
-          <span>可是永遠有人記得那個<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />月</span>
-          <span>非常非常地冷</span>
-        </p>
+        <div v-if="isConnected">
+          <p>
+            <span>長頭髮的<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose"  :isLocked="isLocked" length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />住在<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡</span>
+            <span>討厭<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡強壯的<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
+            <span>笑起來像<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
+            <span>忘記的時候像<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />的<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" anchor="right" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked" length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
+          </p>
+          <p>
+            <span>有一天<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />被<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />了</span>
+            <span><WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />們不知道明天會有什麼<WordSelector anchor="right" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
+            <span><WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />在<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />裡等待著<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />出現</span>
+            <span>途中<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />死了<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />次</span>
+          </p>
+          <p>
+            <span>幸好還有<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
+            <span><WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />帶著<WordSelector anchor="left" v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' />和<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
+            <span>用時間和<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
+            <span>尋回了<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='4' :wordList='wordList' :blankList='blankList' :socket='socket' />的<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='2' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
+          </p>
+          <p>
+            <span>那天以後</span>
+            <span>一切都<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='4' :wordList='wordList' :blankList='blankList' :socket='socket' /></span>
+            <span>可是永遠有人記得那個<WordSelector v-on:wordSelectorOpen="wordSelectorOpen" v-on:wordSelectorClose="wordSelectorClose" :isLocked="isLocked"length='1' :wordList='wordList' :blankList='blankList' :socket='socket' />月</span>
+            <span>非常非常地冷</span>
+          </p>
+        </div>
 
     </div>
 
