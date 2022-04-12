@@ -1,11 +1,15 @@
 <template>
 <div>
-  <GamesPoem />
+  <App />
 </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+    }
+  },
   head() {
     return {
       // title: `Party Code: ${this.$route.params.party.toUpperCase()}`
@@ -13,4 +17,3 @@ export default {
   },
 }
 </script>
-

@@ -3,6 +3,7 @@ let wordList = require('../fei-words.js')
 let state = {
   blankList: new Array(wordList.length),
   isLocked: false,
+  game: 'Static',
 }
 
 function deepCopy(data) {
@@ -61,6 +62,13 @@ export default function(socketInstance) {
     })
 
     socket.on('close word selector', closeWordSelector)
+
+    socket.on('change game', (game) => {
+      console.log('GAME  ', socket.id)
+      state.game = game
+      socket.emit('new state', state)
+      socket.broadcast.emit('new state', state)
+    })
 
     socket.on('lock state', () => {
       console.log('LOCK  ', socket.id)

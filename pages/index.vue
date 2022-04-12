@@ -28,7 +28,7 @@ export default {
       hostParty: {},
       hostPartyTicket: '',
       partyCode: '',
-      selectedGame: 'poem',
+      selectedGame: 'static',
       parties: [],
     }
   },
