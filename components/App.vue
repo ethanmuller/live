@@ -7,6 +7,7 @@
         <button v-if="!isLocked" @click="sendLock()" class="btn btn--mod">🔒 Lock</button>
         <button v-if="isLocked" @click="sendUnlock()" class="btn btn--mod">🔓 Unlock</button>
         <button @click="offerReset()" class="btn btn--mod">🔄 Reset</button>
+        <button @click="endPartyConfirm()" class="btn btn--mod btn--danger">🛑 End Party: {{ this.$route.params.party }}</button>
       </div>
       <div class="controls">
         <select @change="changeGame" v-model="game">
@@ -85,6 +86,7 @@ export default {
 
     this.socket.on('connect', this.connect)
     this.socket.on('new state', this.setState)
+    this.socket.on('end party', this.receivePartyEnd)
     this.socket.emit('join', (state) => {
       this.blankList = state.blankList
       this.isLocked = state.isLocked
@@ -93,6 +95,9 @@ export default {
   },
 
   beforeDestroy() {
+    this.socket.off('connect', this.connect)
+    this.socket.off('new state', this.setState)
+    this.socket.off('end party', this.receivePartyEnd)
   },
 
   methods: {
@@ -113,6 +118,20 @@ export default {
       return self.$parent.$children
         .filter(c => c._name === '<WordSelector>') // Filter out other component types
         .indexOf(this)
+    },
+
+    receivePartyEnd() {
+      this.$router.push({ path: '/', query: this.$route.query })
+    },
+
+    endParty() {
+      this.socket.emit('end party', this.$route.params.party )
+    },
+
+    endPartyConfirm() {
+      if (confirm('Are you sure you want to end the party?')) {
+        this.endParty()
+      }
     },
     offerReset() {
       if (confirm('Are you sure you want to reset everything?')) {

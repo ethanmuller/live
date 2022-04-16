@@ -1,3 +1,4 @@
+const partyManager = require('../server/party-manager')
 let wordList = require('../fei-words.js')
 
 let state = {
@@ -48,6 +49,13 @@ export default function(socketInstance) {
 
       socket.emit('new state', state)
       socket.broadcast.emit('new state', state)
+    })
+
+    socket.on('end party', (id) => {
+      console.log('END   ', id)
+      partyManager.endParty(id)
+      socket.emit('end party', state)
+      socket.broadcast.emit('end party', state)
     })
 
     socket.on('open word selector', (i) => {

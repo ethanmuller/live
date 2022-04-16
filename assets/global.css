@@ -144,17 +144,18 @@ input[type="text"] {
     color: white;
 }
 
-.btn--danger {
-    font-weight: bold;
-    background: #f00;
-    color: white;
-}
-
 .btn--mod {
     font-weight: bold;
     background: transparent;
     color: inherit;
     border: 3px solid;
+}
+
+.btn--danger {
+    font-weight: bold;
+    background: #f00;
+    color: white;
+    margin-left: auto;
 }
 
 .btn--sm {
