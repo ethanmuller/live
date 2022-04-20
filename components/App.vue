@@ -1,6 +1,5 @@
 <template>
   <main class="main">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <div class="mod-panel" v-if="isMod">
       <span class="mod-panel__title">Mod Panel</span>
       <div class="mod-panel__controls">
@@ -12,13 +11,11 @@
       <div class="controls">
         <select @change="changeGame" v-model="game">
           <option disabled value="">Please select one</option>
-          <option>FillingIn</option>
-          <option>Static</option>
+          <option>Px</option>
+          <option>GoGoGo</option>
         </select>
       </div>
     </div>
-
-    <canvas ref="canvas" class="qrcode"></canvas>
 
     <component :is="game" />
 

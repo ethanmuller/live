@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
 :root {
-  --bg: #e6e6e6;
   --fg: #000;
   --text: black;
   --cta: #ff0000;
@@ -26,8 +25,7 @@ html {
 }
 
 body {
-    background: #F3F3F3;
-    background: var(--bg);
+    background: #000;
 
     max-width: 38em;
     margin: 0 auto;
