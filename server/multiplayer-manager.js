@@ -59,6 +59,7 @@ export default function(socketInstance) {
     })
 
     socket.on('open word selector', (i) => {
+      console.log('somebody opened a word selector')
       if (state.blankList.indexOf(socket.id) > -1) {
         closeWordSelector()
       }

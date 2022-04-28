@@ -1,29 +1,5 @@
 <template>
-  <main class="main">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <div class="mod-panel" v-if="isMod">
-      <span class="mod-panel__title">Mod Panel</span>
-      <div class="mod-panel__controls">
-        <button v-if="!isLocked" @click="sendLock()" class="btn btn--mod">🔒 Lock</button>
-        <button v-if="isLocked" @click="sendUnlock()" class="btn btn--mod">🔓 Unlock</button>
-        <button @click="offerReset()" class="btn btn--mod">🔄 Reset</button>
-        <button @click="endPartyConfirm()" class="btn btn--mod btn--danger">🛑 End Party: {{ this.$route.params.party }}</button>
-      </div>
-      <div class="controls">
-        <select @change="changeGame" v-model="game">
-          <option disabled value="">Please select one</option>
-          <option>Static</option>
-          <option>FillingIn</option>
-          <option>Raven</option>
-        </select>
-      </div>
-    </div>
-
-    <canvas ref="canvas" class="qrcode"></canvas>
-
-    <component :is="game" />
-
-  </main>
+<div style="font-size: 3em">𓄿</div>
 </template>
 
 <script>
@@ -41,8 +17,6 @@ export default {
       blankList: new Array(wordList.length),
       isLocked: false,
       url: '',
-
-      game: '',
 
       // Only one WordSelector is allowed open at a time.
       // This represents the index of the one that's open.
@@ -70,41 +44,19 @@ export default {
 
   mounted() {
     this.url = window.location.protocol + '//' + window.location.host + window.location.pathname
-    const canvas = this.$refs.canvas
-
-
-    QRCode.toCanvas(canvas, this.url, {
-      scale: 8,
-      margin: 0,
-      color: {
-        dark: '#000',  // Blue dots
-        light: '#0000' // Transparent background
-      }
-    }, function (error) {
-      if (error) console.error(error)
-      console.log('success!');
-    })
 
     this.socket.on('connect', this.connect)
     this.socket.on('new state', this.setState)
-    this.socket.on('end party', this.receivePartyEnd)
     this.socket.emit('join', (state) => {
       this.blankList = state.blankList
       this.isLocked = state.isLocked
-      this.game = state.game
     })
   },
 
   beforeDestroy() {
-    this.socket.off('connect', this.connect)
-    this.socket.off('new state', this.setState)
-    this.socket.off('end party', this.receivePartyEnd)
   },
 
   methods: {
-  changeGame() {
-      this.socket.emit('change game', this.game)
-  },
     connect() {
       console.log('connected')
     },
@@ -119,20 +71,6 @@ export default {
       return self.$parent.$children
         .filter(c => c._name === '<WordSelector>') // Filter out other component types
         .indexOf(this)
-    },
-
-    receivePartyEnd() {
-      this.$router.push({ path: '/', query: this.$route.query })
-    },
-
-    endParty() {
-      this.socket.emit('end party', this.$route.params.party )
-    },
-
-    endPartyConfirm() {
-      if (confirm('Are you sure you want to end the party?')) {
-        this.endParty()
-      }
     },
     offerReset() {
       if (confirm('Are you sure you want to reset everything?')) {
@@ -160,39 +98,39 @@ export default {
     setState(newState) {
       this.blankList = newState.blankList
       this.isLocked = newState.isLocked
-      this.game = newState.game
     }
   },
 }
 </script>
 
 <style>
-  .qrcode {
-    /* using sticky instead of absolute
-    so it doesn't cover mod bar */
-    position: sticky;
-    top: 0;
-
-align-self: flex-end;
-
-    width: 3.7em !important;
-    height: auto !important;
-    padding: 0.5em;
-    background: white;
-    z-index: 1;
+  p {
+    margin: 0 0 2rem;
+  }
+  p > span {
+    display: block;
+  }
+  .partylink {
+    padding: 0.5rem; display: inline-block;
   }
 
-  .qrcode {
+  #poemcontainer {
+    width: 100%;
+    font-family: 'Noto Sans TC', sans-serif;
+    max-width: 18em;
+    line-height: 1.3;
+
     font-size: 1.2rem;
+    padding: 0.5em 0.5em 9em;
   }
   @media (min-width: calc(336px)) {
-    .qrcode {
+    #poemcontainer {
       /* this font size will grow with the browser */
       font-size: calc(0.2rem + 5vw);
     }
   }
   @media (min-width: calc(590px)) {
-    .qrcode {
+    #poemcontainer {
       /* cap off font size growth */
       font-size: 2rem;
     }

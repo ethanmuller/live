@@ -54,6 +54,7 @@ export default {
     editBlank() {
     },
     openWordList() {
+      alert('opening')
       this.isWordListOpen = true
       const i = this.findIndexOfInstance(this)
       this.socket.emit('open word selector', i)

@@ -3,7 +3,6 @@ const app = express()
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const partyManager = require('../server/party-manager')
-import { io } from '../server/multiplayer-manager'
 
 app.use(bodyParser.json())
 app.use(fileUpload())
@@ -52,7 +51,6 @@ app.post('/:id/upload', (req, res) => {
       res.json({ url })
     })
 
-  // io.in(req.params.id).emit('test-event')
 })
 
 module.exports = app
