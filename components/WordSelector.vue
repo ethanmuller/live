@@ -119,6 +119,18 @@ export default {
     color: transparent;
     animation: blink 500ms infinite alternate;
     transform-origin: 50% 100%;
+    position: relative;
+  }
+  .word-selector--is-being-edited:not(.word-selector--is-being-edited-by-me)::after {
+    content: '🔒';
+    color: black;
+    font-size: 0.7em;
+    filter: brightness(0);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    margin-top: -0.125em;
   }
   .word-selector--is-being-edited-by-me {
     background: #54f;
