@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  props: ['length', 'anchor', 'wordList', 'blankList', 'socket', 'isLocked'],
+  props: ['length', 'anchor', 'wordList', 'blankList', 'socket', 'isLocked', 'i'],
   data() {
     return {
       word: "",
@@ -40,30 +40,25 @@ export default {
     "isBeingEditedByMe": function() {
       // todo: move this method out of computed property.
       // maybe calculate index on mount instead?
-      const i = this.findIndexOfInstance(this)
-      return this.blankList[i] === this.socket.id && typeof this.socket.id !== 'undefined'
+      return this.blankList[this.i] === this.socket.id && typeof this.socket.id !== 'undefined'
     },
     "isBeingEdited": function() {
       // todo: move this method out of computed property.
       // maybe calculate index on mount instead?
-      const i = this.findIndexOfInstance(this)
-      return this.blankList[i] && this.blankList[i].length === 20
+      return this.blankList[this.i] && this.blankList[this.i].length === 20
     },
   },
   methods: {
     editBlank() {
     },
     openWordList() {
-      alert('opening')
       this.isWordListOpen = true
-      const i = this.findIndexOfInstance(this)
-      this.socket.emit('open word selector', i)
-      this.$emit('wordSelectorOpen', i)
+      this.socket.emit('open word selector', this.i)
+      this.$emit('wordSelectorOpen', this.i)
     },
     closeWordList() {
       this.isWordListOpen = false
-      const i = this.findIndexOfInstance(this)
-      this.socket.emit('close word selector', i)
+      this.socket.emit('close word selector', this.i)
       this.$emit('wordSelectorClose')
     },
     isWordUsed(word) {
@@ -73,17 +68,10 @@ export default {
       // this function is called by parent to programmatically set words
       this.word = word
     },
-    findIndexOfInstance(self) {
-      // this is a dodgy function, but it's what we use
-      // to figure out the index this word lives at
-      return self.$parent.$children
-        .filter(c => c._name === '<WordSelector>') // Filter out other component types
-        .indexOf(this)
-    },
     submitWord(e) {
       this.word = e.target.innerHTML
 
-      const i = this.findIndexOfInstance(this)
+      const i = this.i
       const to = this.word
       const from = this.pastWords[0]
 

@@ -59,7 +59,6 @@ export default function(socketInstance) {
     })
 
     socket.on('open word selector', (i) => {
-      console.log('somebody opened a word selector')
       if (state.blankList.indexOf(socket.id) > -1) {
         closeWordSelector()
       }
@@ -94,7 +93,7 @@ export default function(socketInstance) {
     })
 
     socket.on('submit word', function (to,from,indexOfBlank, callback) {
-      console.log('WORD  ', socket.id, ': ', to, from)
+      console.log('WORD  ', socket.id, ': ', indexOfBlank, to, from)
 
       const word = to
 
