@@ -66,6 +66,10 @@ select, option {
   font-family: 'Noto Sans TC', sans-serif;
 }
 
+ul {
+  padding: 0;
+}
+
 .button--green {
   display: inline-block;
   border-radius: 4px;
@@ -304,7 +308,9 @@ input {
   gap: 1rem;
 }
 .controls {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
+  margin-bottom: 1em;
+}
+
+.controls select {
+  padding: 0.7em;
 }

@@ -2,9 +2,20 @@ const partyManager = require('../server/party-manager')
 let wordList = require('../fei-words.js')
 
 let state = {
+  game: 'Static',
+
+  // FillingIn
   blankList: new Array(wordList.length),
   isLocked: false,
-  game: 'Static',
+
+  // Raven
+  betweenRounds: false,
+  votes: {
+    Piano: 0,
+    Guitar: 0,
+    Bass: 0,
+    Drums: 0,
+  }
 }
 
 function deepCopy(data) {
@@ -46,6 +57,14 @@ export default function(socketInstance) {
 
       state.blankList = new Array(wordList.length)
       state.isLocked = false
+
+      state.betweenRounds = false
+      state.votes = {
+        Piano: 0,
+        Guitar: 0,
+        Bass: 0,
+        Drums: 0,
+      }
 
       socket.emit('new state', state)
       socket.broadcast.emit('new state', state)
@@ -117,6 +136,29 @@ export default function(socketInstance) {
       socket.emit('new state', state)
       socket.broadcast.emit('new state', state)
       return callback()
+    })
+
+    socket.on('end round', function () {
+      state.betweenRounds = true
+      io.emit('new state', state)
+    })
+
+    socket.on('start round', function () {
+      state.votes = {
+        Piano: 0,
+        Guitar: 0,
+        Bass: 0,
+        Drums: 0,
+      }
+
+      state.betweenRounds = false
+
+      io.emit('new state', state)
+    })
+
+    socket.on('send vote', function (instrument) {
+      state.votes[instrument] += 1
+      io.emit('new state', state)
     })
 
     socket.on('disconnect', function (fn) {

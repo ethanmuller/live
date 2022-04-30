@@ -21,7 +21,7 @@ function makeId(length) {
   return result.join('');
 }
 
-//addParty({ ticket: 777, selectedGame: 'irrelevant' })
+addParty({ ticket: 777, selectedGame: 'irrelevant' })
 
 function addParty(newPartyData) {
   const party = {

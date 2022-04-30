@@ -2,13 +2,7 @@
   <main class="main">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <div class="mod-panel" v-if="isMod">
-      <span class="mod-panel__title">Mod Panel</span>
-      <div class="mod-panel__controls">
-        <button v-if="!isLocked" @click="sendLock()" class="btn btn--mod">🔒 Lock</button>
-        <button v-if="isLocked" @click="sendUnlock()" class="btn btn--mod">🔓 Unlock</button>
-        <button @click="offerReset()" class="btn btn--mod">🔄 Reset</button>
-        <button @click="endPartyConfirm()" class="btn btn--mod btn--danger">🛑 End Party: {{ this.$route.params.party }}</button>
-      </div>
+
       <div class="controls">
         <select @change="changeGame" v-model="game">
           <option disabled value="">Please select one</option>
@@ -16,6 +10,17 @@
           <option>FillingIn</option>
           <option>Raven</option>
         </select>
+      </div>
+      <div class="mod-panel__controls">
+
+        <button v-if="!isLocked && game === 'FillingIn'" @click="sendLock()" class="btn btn--mod">🔒 Lock</button>
+        <button v-if="isLocked && game === 'FillingIn'" @click="sendUnlock()" class="btn btn--mod">🔓 Unlock</button>
+
+        <button v-if="!betweenRounds && game === 'Raven'" @click="endRound" class="btn btn--mod">End Round</button>
+        <button v-if="betweenRounds && game === 'Raven'" @click="startRound" class="btn btn--mod">Start Round</button>
+
+        <button @click="offerReset()" class="btn btn--mod">🔄 Reset</button>
+        <button @click="endPartyConfirm()" class="btn btn--mod btn--danger">🛑 End Party: {{ this.$route.params.party }}</button>
       </div>
     </div>
 
@@ -43,6 +48,7 @@ export default {
       url: '',
 
       game: '',
+      betweenRounds: false,
 
       // Only one WordSelector is allowed open at a time.
       // This represents the index of the one that's open.
@@ -75,6 +81,7 @@ export default {
       this.blankList = state.blankList
       this.isLocked = state.isLocked
       this.game = state.game
+      this.betweenRounds = state.betweenRounds
     })
   },
 
@@ -85,6 +92,13 @@ export default {
   },
 
   methods: {
+  endRound() {
+    this.socket.emit('end round')
+  },
+  startRound() {
+    this.socket.emit('start round')
+  },
+
   changeGame() {
       this.socket.emit('change game', this.game)
   },
@@ -144,6 +158,7 @@ export default {
       this.blankList = newState.blankList
       this.isLocked = newState.isLocked
       this.game = newState.game
+      this.betweenRounds = newState.betweenRounds
     }
   },
 }
@@ -159,7 +174,7 @@ export default {
 align-self: flex-end;
 
     width: 3.7em !important;
-    height: auto !important;
+    height: 3.7em !important;
     padding: 0.5em;
     background: white;
     z-index: 1;
