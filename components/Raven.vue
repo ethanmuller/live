@@ -6,7 +6,7 @@
 
         <div>
           <div class="result" v-for="i in orderedVotes.slice(0,2)">
-            <strong>{{i[0]}}: </strong>
+            <strong>{{displayText[i[0]]}}</strong>
 
             <svg width="31" height="28" viewBox="0 0 31 28" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M15.0562 5.67499L15.5 6.52989L15.9438 5.67499C17.1005 3.44663 19.2907 1.70064 21.6021 0.929149C23.9163 0.156704 26.2417 0.388316 27.7838 1.9284C31.4054 5.54518 31.4054 11.4089 27.7838 15.0257L15.5 27.2934L3.21616 15.0257C-0.405386 11.4089 -0.405386 5.54518 3.21616 1.9284C4.75827 0.388316 7.08371 0.156704 9.39794 0.929149C11.7093 1.70065 13.8995 3.44663 15.0562 5.67499Z"/>
@@ -19,12 +19,12 @@
         <button v-for="numVotes, instrument in votes" @click="triggerVote(instrument)" class="vote-btn">
           <span class="results-bg"></span>
           <span class="results-bar" :style="{ width: `${ numVotes / Math.max(totalVotes, 1) * 100 }%` }"></span>
-          {{instrument}}
+          {{displayText[instrument]}}
 
 
           <span class="vote-count">{{numVotes}}</span>
           <svg width="31" height="28" viewBox="0 0 31 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15.0562 5.67499L15.5 6.52989L15.9438 5.67499C17.1005 3.44663 19.2907 1.70064 21.6021 0.929149C23.9163 0.156704 26.2417 0.388316 27.7838 1.9284C31.4054 5.54518 31.4054 11.4089 27.7838 15.0257L15.5 27.2934L3.21616 15.0257C-0.405386 11.4089 -0.405386 5.54518 3.21616 1.9284C4.75827 0.388316 7.08371 0.156704 9.39794 0.929149C11.7093 1.70065 13.8995 3.44663 15.0562 5.67499Z"/>
+            <path d="M15.0562 5.67499L15.5 6.52989L15.9438 5.67499C17.1005 3.44663 19.2907 1.70064 21.6021 0.929149C23.9163 0.156704 26.2417 0.388316 27.7838 1.9284C31.4054 5.54518 31.4054 11.4089 27.7838 15.0257L15.5 27.2934L3.21616 15.0257C-0.405386 11.4089 -0.405386 5.54518 3.21616 1.9284C4.75827 0.388316 7.08371 0.156704 9.39794 0.929149C11.7093 1.70065 13.8995 3.44663 15.0562 5.67499Z" />
           </svg>
 
         </button>
@@ -88,8 +88,14 @@ export default {
         Guitar: 0,
         Bass: 0,
         Drums: 0,
-      }
+      },
 
+      displayText: {
+        Piano: "Piano 🎹",
+        Guitar: "Guitar 🎸",
+        Bass: "Bass 🎻",
+        Drums: "Drums 🥁"
+      }
       // Only one WordSelector is allowed open at a time.
       // This represents the index of the one that's open.
       //openWordSelectorIndex: -1,
@@ -108,7 +114,40 @@ export default {
     },
     orderedVotes() {
       const votesArray = Object.entries(this.votes)
-      return votesArray.sort((a,b) => { return b[1] - a[1]})
+      let ordered = votesArray.sort((a, b) => { return b[1] - a[1] })
+
+      // make sure that if any top 2 are tied, to randomize it a bit each time to prevent cases like:
+      // if "Piano" is tied with anybody, it will always win, because its earlier appearance on the votes array
+      // But also everyone should compute the same "random" :S
+
+      // In this case, I'm using the total number of votes as a syncronized "random" number seed
+      // We could change this for a real sync random
+      let totalVotes = 1
+      Object.values(this.votes).forEach(n => {
+        totalVotes += n
+      })
+
+      // Check for ties
+      const topCount = 2
+      for (let i = 0; i < topCount;) {
+        let sameVotes = 1
+        for (let j = i + 1; j < ordered.length && ordered[i][1] == ordered[j][1]; ++j) {
+          sameVotes++
+        }
+
+        if (i + sameVotes > topCount) // "randomize" tied votes
+        {
+          let newOrderValue = {}
+          for (let j = 0; j < sameVotes; ++j) {
+            newOrderValue[ordered[i + j][0]] = (j + totalVotes) * 17 % sameVotes // randomish order using a * prime
+          }
+          let reorderedSubarray = ordered.splice(i, sameVotes).sort((a, b) => { return newOrderValue[b[0]] - newOrderValue[a[0]] })
+          ordered.splice(i, 0, ...reorderedSubarray)
+        }
+
+        i += sameVotes;
+      }
+      return ordered
     }
   },
 
