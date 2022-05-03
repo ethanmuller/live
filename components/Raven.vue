@@ -2,15 +2,14 @@
   <div>
     <img v-if="ravenState !== 'voting'"src="@/static/raven_transparent.gif" width="128" height="128" class="raven" />
     <div v-if="ravenState=='intro'">
-      <h1>Raven</h1>
+      <h1><span style="font-family: 'Noto Sans TC', sans-serif;">烏鴉</span> Raven</h1>
       <div>
-        <p>music by YenTing</p>
-        <p>words by Fei</p>
-        <p>dev by Ethan &amp; Ferran</p>
+        <p style="text-align:center;">wait for it...</p>
       </div>
     </div>
     <div v-if="!isScreen">
       <div v-if="ravenState=='results'" class="results">
+        The two chosen:
         <div>
           <div class="result" v-for="i in orderedVotes.slice(0,2)">
             <strong>{{displayText[i[0]]}}</strong>
@@ -39,8 +38,7 @@
     </div>
     <div v-if="isScreen" class="screen">
       <div v-if="ravenState=='results'" class="results">
-        Top 2:
-
+        The two chosen:
         <div>
           <div class="result" v-for="i in orderedVotes.slice(0,2)">
             <strong>{{displayText[i[0]]}} </strong>
@@ -274,7 +272,7 @@ export default {
 }
 
 .result {
-  padding: 2em;
+  padding: 1em;
   margin: 1em;
 
   border-radius: 8px;
