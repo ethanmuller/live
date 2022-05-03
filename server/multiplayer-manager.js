@@ -9,7 +9,7 @@ let state = {
   isLocked: false,
 
   // Raven
-  betweenRounds: false,
+  ravenState: 'intro',
   votes: {
     Piano: 0,
     Guitar: 0,
@@ -58,7 +58,7 @@ export default function(socketInstance) {
       state.blankList = new Array(wordList.length)
       state.isLocked = false
 
-      state.betweenRounds = false
+      state.ravenState = 'intro'
       state.votes = {
         Piano: 0,
         Guitar: 0,
@@ -139,7 +139,7 @@ export default function(socketInstance) {
     })
 
     socket.on('end round', function () {
-      state.betweenRounds = true
+      state.ravenState = 'results'
       io.emit('new state', state)
     })
 
@@ -151,7 +151,7 @@ export default function(socketInstance) {
         Drums: 0,
       }
 
-      state.betweenRounds = false
+      state.ravenState = 'voting'
 
       io.emit('new state', state)
     })

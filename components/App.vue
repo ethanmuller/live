@@ -16,11 +16,12 @@
         <button v-if="!isLocked && game === 'FillingIn'" @click="sendLock()" class="btn btn--mod">🔒 Lock</button>
         <button v-if="isLocked && game === 'FillingIn'" @click="sendUnlock()" class="btn btn--mod">🔓 Unlock</button>
 
-        <button v-if="!betweenRounds && game === 'Raven'" @click="endRound" class="btn btn--mod">End Round</button>
-        <button v-if="betweenRounds && game === 'Raven'" @click="startRound" class="btn btn--mod">Start Round</button>
+        <button v-if="ravenState === 'voting' && game === 'Raven'" @click="endRound" class="btn btn--mod">End Round</button>
+        <button v-if="ravenState !== 'voting' && game === 'Raven'" @click="startRound" class="btn btn--mod">Start Round</button>
+        <button v-if="ravenState === 'results' && game === 'Raven'" @click="endRaven" class="btn btn--mod">Back to intro</button>
 
-        <button @click="offerReset()" class="btn btn--mod">🔄 Reset</button>
-        <button @click="endPartyConfirm()" class="btn btn--mod btn--danger">🛑 End Party: {{ this.$route.params.party }}</button>
+        <button v-if="game !== 'Raven'" @click="offerReset()" class="btn btn--mod">🔄 Reset</button>
+        <button v-if="game === 'Static'" @click="endPartyConfirm()" class="btn btn--mod btn--danger">🛑 End Party: {{ this.$route.params.party }}</button>
       </div>
     </div>
 
@@ -48,7 +49,7 @@ export default {
       url: '',
 
       game: '',
-      betweenRounds: false,
+      ravenState: 'intro'
 
       // Only one WordSelector is allowed open at a time.
       // This represents the index of the one that's open.
@@ -81,7 +82,6 @@ export default {
       this.blankList = state.blankList
       this.isLocked = state.isLocked
       this.game = state.game
-      this.betweenRounds = state.betweenRounds
     })
   },
 
@@ -98,7 +98,9 @@ export default {
   startRound() {
     this.socket.emit('start round')
   },
-
+  endRaven() {
+      this.socket.emit('send reset')
+  },
   changeGame() {
       this.socket.emit('change game', this.game)
   },
@@ -158,7 +160,7 @@ export default {
       this.blankList = newState.blankList
       this.isLocked = newState.isLocked
       this.game = newState.game
-      this.betweenRounds = newState.betweenRounds
+      this.ravenState = newState.ravenState
     }
   },
 }

@@ -1,20 +1,27 @@
 <template>
   <div>
+    <img v-if="ravenState !== 'voting'"src="@/static/raven_transparent.gif" width="128" height="128" class="raven" />
+    <div v-if="ravenState=='intro'">
+      <h1>Raven</h1>
+      <div>
+        <p>music by YenTing</p>
+        <p>words by Fei</p>
+        <p>dev by Ethan &amp; Ferran</p>
+      </div>
+    </div>
     <div v-if="!isScreen">
-      <div v-if="betweenRounds" class="results">
-        Top 2:
-
+      <div v-if="ravenState=='results'" class="results">
         <div>
           <div class="result" v-for="i in orderedVotes.slice(0,2)">
             <strong>{{displayText[i[0]]}}</strong>
 
             <svg width="31" height="28" viewBox="0 0 31 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15.0562 5.67499L15.5 6.52989L15.9438 5.67499C17.1005 3.44663 19.2907 1.70064 21.6021 0.929149C23.9163 0.156704 26.2417 0.388316 27.7838 1.9284C31.4054 5.54518 31.4054 11.4089 27.7838 15.0257L15.5 27.2934L3.21616 15.0257C-0.405386 11.4089 -0.405386 5.54518 3.21616 1.9284C4.75827 0.388316 7.08371 0.156704 9.39794 0.929149C11.7093 1.70065 13.8995 3.44663 15.0562 5.67499Z"/>
+              <path d="M15.0562 5.67499L15.5 6.52989L15.9438 5.67499C17.1005 3.44663 19.2907 1.70064 21.6021 0.929149C23.9163 0.156704 26.2417 0.388316 27.7838 1.9284C31.4054 5.54518 31.4054 11.4089 27.7838 15.0257L15.5 27.2934L3.21616 15.0257C-0.405386 11.4089 -0.405386 5.54518 3.21616 1.9284C4.75827 0.388316 7.08371 0.156704 9.39794 0.929149C11.7093 1.70065 13.8995 3.44663 15.0562 5.67499Z" />
             </svg> &times; {{i[1]}}
           </div>
         </div>
       </div>
-      <div v-if="!betweenRounds">
+      <div v-if="ravenState=='voting'">
 
         <button v-for="numVotes, instrument in votes" @click="triggerVote(instrument)" class="vote-btn">
           <span class="results-bg"></span>
@@ -31,7 +38,7 @@
       </div>
     </div>
     <div v-if="isScreen" class="screen">
-      <div v-if="betweenRounds" class="results">
+      <div v-if="ravenState=='results'" class="results">
         Top 2:
 
         <div>
@@ -39,13 +46,13 @@
             <strong>{{displayText[i[0]]}} </strong>
 
             <svg width="31" height="28" viewBox="0 0 31 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15.0562 5.67499L15.5 6.52989L15.9438 5.67499C17.1005 3.44663 19.2907 1.70064 21.6021 0.929149C23.9163 0.156704 26.2417 0.388316 27.7838 1.9284C31.4054 5.54518 31.4054 11.4089 27.7838 15.0257L15.5 27.2934L3.21616 15.0257C-0.405386 11.4089 -0.405386 5.54518 3.21616 1.9284C4.75827 0.388316 7.08371 0.156704 9.39794 0.929149C11.7093 1.70065 13.8995 3.44663 15.0562 5.67499Z"/>
+              <path d="M15.0562 5.67499L15.5 6.52989L15.9438 5.67499C17.1005 3.44663 19.2907 1.70064 21.6021 0.929149C23.9163 0.156704 26.2417 0.388316 27.7838 1.9284C31.4054 5.54518 31.4054 11.4089 27.7838 15.0257L15.5 27.2934L3.21616 15.0257C-0.405386 11.4089 -0.405386 5.54518 3.21616 1.9284C4.75827 0.388316 7.08371 0.156704 9.39794 0.929149C11.7093 1.70065 13.8995 3.44663 15.0562 5.67499Z" />
             </svg> &times; {{i[1]}}
           </div>
         </div>
       </div>
 
-      <div v-if="!betweenRounds">
+      <div v-if="ravenState=='voting'">
 
         <TransitionGroup name="list" tag="ul">
           <li v-for="item in orderedVotes" :key="item[0]" class="" class="vote-btn">
@@ -82,7 +89,7 @@ export default {
       isLocked: false,
       url: '',
 
-      betweenRounds: false,
+      ravenState: 'intro',
       votes: {
         Piano: 0,
         Guitar: 0,
@@ -156,7 +163,7 @@ export default {
     this.socket.on('new state', this.setState)
     this.socket.emit('join', (state) => {
       this.votes = state.votes
-      this.betweenRounds = state.betweenRounds
+      this.ravenState = state.ravenState
     })
   },
 
@@ -173,7 +180,7 @@ export default {
 
     setState(newState) {
       this.votes = newState.votes
-      this.betweenRounds = newState.betweenRounds
+      this.ravenState = newState.ravenState
     },
   },
 }
@@ -273,6 +280,7 @@ export default {
   border-radius: 8px;
 
   border: 1px solid #aaa;
+  font-size: 1.5em;
 }
 
 .list-move, /* apply transition to moving elements */
@@ -300,5 +308,14 @@ animations can be calculated correctly. */
 .screen svg path {
   fill: red;
   stroke: red;
+}
+h1 {
+    text-align: center;
+}
+
+.raven {
+    image-rendering: pixelated;
+    display: block;
+    margin: auto;
 }
 </style>
