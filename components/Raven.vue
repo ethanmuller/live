@@ -1,9 +1,9 @@
 <template>
   <div>
-    <img v-if="ravenState !== 'voting'"src="@/static/raven_transparent.gif" width="128" height="128" class="raven" />
-    <div v-if="ravenState=='intro'">
+    <img v-if="ravenState !== 'voting'" src="@/static/raven_transparent.gif" width="128" height="128" class="raven" />
+    <div v-if="ravenState=='intro' || ravenState=='end'">
       <h1><span style="font-family: 'Noto Sans TC', sans-serif;">烏鴉</span> Raven</h1>
-      <div>
+      <div v-if="ravenState=='intro'">
         <p style="text-align:center;">wait for it...</p>
       </div>
     </div>
@@ -120,6 +120,9 @@ export default {
     orderedVotes() {
       const votesArray = Object.entries(this.votes)
       let ordered = votesArray.sort((a, b) => { return b[1] - a[1] })
+
+      if (this.isScreen && this.ravenState == 'voting')
+        return ordered;
 
       // make sure that if any top 2 are tied, to randomize it a bit each time to prevent cases like:
       // if "Piano" is tied with anybody, it will always win, because its earlier appearance on the votes array

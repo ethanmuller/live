@@ -143,6 +143,11 @@ export default function(socketInstance) {
       io.emit('new state', state)
     })
 
+    socket.on('end game', function() {
+      state.ravenState = 'end'
+      io.emit('new state', state)
+    })
+
     socket.on('start round', function () {
       state.votes = {
         Piano: 0,
