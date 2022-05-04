@@ -130,7 +130,7 @@ export default {
 
       // In this case, I'm using the total number of votes as a syncronized "random" number seed
       // We could change this for a real sync random
-      let totalVotes = 1
+      let totalVotes = 0
       Object.values(this.votes).forEach(n => {
         totalVotes += n
       })
@@ -147,7 +147,7 @@ export default {
         {
           let newOrderValue = {}
           for (let j = 0; j < sameVotes; ++j) {
-            newOrderValue[ordered[i + j][0]] = (j + totalVotes) * 17 % sameVotes // randomish order using a * prime
+            newOrderValue[ordered[i + j][0]] = (j + totalVotes) * 17 % 5 // randomish order using a * prime % prime
           }
           let reorderedSubarray = ordered.splice(i, sameVotes).sort((a, b) => { return newOrderValue[b[0]] - newOrderValue[a[0]] })
           ordered.splice(i, 0, ...reorderedSubarray)
