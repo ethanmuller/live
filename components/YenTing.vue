@@ -3,7 +3,7 @@
     <canvas class="static" ref="canvas"></canvas>
     <h1 class="url">live.yentinglo.net</h1>
 
-    <p style="text-align:center;">Welcome! wait for YenTing...</p>
+    <p id="welcome">Welcome! wait for YenTing...</p>
   </div>
 </template>
 
@@ -83,4 +83,9 @@ export default {
     margin: 2em;
     text-align: center;
 }
+
+  #welcome {
+    text-align: center;
+    margin: 2em 0 2em 0;
+  }
 </style>
