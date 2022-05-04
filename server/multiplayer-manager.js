@@ -2,7 +2,7 @@ const partyManager = require('../server/party-manager')
 let wordList = require('../fei-words.js')
 
 let state = {
-  game: 'Static',
+  game: 'YenTing',
 
   // FillingIn
   blankList: new Array(wordList.length),

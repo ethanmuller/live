@@ -6,7 +6,7 @@
       <div class="controls">
         <select @change="changeGame" v-model="game">
           <option disabled value="">Please select one</option>
-          <option>Static</option>
+          <option>YenTing</option>
           <option>FillingIn</option>
           <option>Raven</option>
         </select>
@@ -23,13 +23,16 @@
         <button v-if="ravenState === 'results' && game === 'Raven'" @click="endRaven" class="btn btn--mod">End song</button>
 
         <button v-if="game !== 'Raven'" @click="offerReset()" class="btn btn--mod">🔄 Reset</button>
-        <button v-if="game === 'Static'" @click="endPartyConfirm()" class="btn btn--mod btn--danger">🛑 End Party: {{ this.$route.params.party }}</button>
+        <button v-if="game === 'YenTing'" @click="endPartyConfirm()" class="btn btn--mod btn--danger">🛑 End Party: {{ this.$route.params.party }}</button>
       </div>
     </div>
 
-    <canvas ref="canvas" class="qrcode"></canvas>
+    <canvas v-if="game !== 'YenTing'" ref="canvas" class="qrcode"></canvas>
 
     <component :is="game" />
+
+    <canvas v-if="game === 'YenTing'" ref="canvasBig" id="qrcode-big"></canvas>
+    <!-- <p v-if="game === 'YenTing'" style="text-align:center;">Let your neighbour scan and join!</p> -->
 
   </main>
 </template>
@@ -62,10 +65,22 @@ export default {
 
   mounted() {
     this.url = window.location.protocol + '//' + window.location.host + window.location.pathname
-    const canvas = this.$refs.canvas
 
 
-    QRCode.toCanvas(canvas, this.url, {
+    QRCode.toCanvas(this.$refs.canvas, this.url, {
+      scale: 8,
+      margin: 0,
+      color: {
+        dark: '#000',  // Blue dots
+        light: '#0000' // Transparent background
+      }
+    }, function (error) {
+      if (error) console.error(error)
+      console.log('success!');
+    })
+
+    console.log(this.$refs.canvasBig)
+    QRCode.toCanvas(this.$refs.canvasBig, this.url, {
       scale: 8,
       margin: 0,
       color: {
@@ -175,13 +190,22 @@ export default {
     position: sticky;
     top: 0;
 
-align-self: flex-end;
+    align-self: flex-end;
 
     width: 3.7em !important;
     height: 3.7em !important;
     padding: 0.5em;
     background: white;
     z-index: 1;
+  }
+
+  #qrcodebig {
+    position: block;
+    margin: auto;
+
+    width: 100%;
+    padding: 1em;
+    background: white;
   }
 
   .qrcode {
