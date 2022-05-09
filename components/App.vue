@@ -17,10 +17,10 @@
         <button v-if="isLocked && game === 'FillingIn'" @click="sendUnlock()" class="btn btn--mod">🔓 Unlock</button>
 
         <!-- Raven buttons -->
-        <button v-if="ravenState === 'voting' && game === 'Raven'" @click="endRound" class="btn btn--mod">End Round</button>
-        <button v-if="(ravenState === 'results' || ravenState === 'intro') && game === 'Raven'" @click="startRound" class="btn btn--mod">Start Round</button>
-        <button v-if="ravenState === 'end' && game === 'Raven'" @click="offerReset()" class="btn btn--mod">Back to intro</button>
-        <button v-if="ravenState === 'results' && game === 'Raven'" @click="endRaven" class="btn btn--mod">End song</button>
+        <button v-if="ravenState === 'voting' && game === 'Raven'" @click="confirmAction(endRound, 'end voting round?')" class="btn btn--mod">End Round</button>
+        <button v-if="(ravenState === 'results' || ravenState === 'intro') && game === 'Raven'" @click="confirmAction(startRound, 'start round?')" class="btn btn--mod">Start Round</button>
+        <button v-if="ravenState === 'end' && game === 'Raven'" @click="confirmAction(sendReset, 'Are you sure you want to reset everything?')" class="btn btn--mod">Back to intro</button>
+        <button v-if="ravenState === 'results' && game === 'Raven'" @click="confirmAction(endRaven,'end raven?')" class="btn btn--mod">End song</button>
 
         <button v-if="game !== 'Raven'" @click="offerReset()" class="btn btn--mod">🔄 Reset</button>
         <button v-if="game === 'YenTing'" @click="endPartyConfirm()" class="btn btn--mod btn--danger">🛑 End Party: {{ this.$route.params.party }}</button>
@@ -150,9 +150,9 @@ export default {
         this.endParty()
       }
     },
-    offerReset() {
-      if (confirm('Are you sure you want to reset everything?')) {
-        this.sendReset()
+    confirmAction(cb, text) {
+      if (confirm(text)) {
+        cb();
       }
     },
     sendReset() {

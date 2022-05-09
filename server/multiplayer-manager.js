@@ -116,12 +116,20 @@ export default function(socketInstance) {
 
       const word = to
 
+      // make sure word is an actual word
+      if (wordList.indexOf(word) == -1) {
+        const err = { err: $`word ${word} does not exist in word list` }
+        console.error(err)
+        return callback(err)
+      }
+
       // make sure word isn't already used
       if (state.blankList.indexOf(word) > -1) {
         const err = { err: 'word already in use' }
         console.error(err)
         return callback(err)
       }
+
 
       // mark word as used
       state.blankList[indexOfBlank] = word
