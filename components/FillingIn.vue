@@ -182,6 +182,10 @@ export default {
       flex-direction: row;
       justify-content: center;
     }
+
+    #title {
+      text-align: left;
+    }
   }
 
 </style>
