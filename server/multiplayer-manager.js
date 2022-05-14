@@ -13,8 +13,8 @@ let state = {
   votes: {
     Piano: 0,
     Guitar: 0,
-    Bass: 0,
-    Drums: 0,
+    /*Bass: 0,*/
+    Drums: 0
   }
 }
 

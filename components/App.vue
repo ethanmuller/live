@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <canvas v-if="game !== 'YenTing'" ref="canvas" class="qrcode"></canvas>
+    <canvas v-if="game !== 'YenTing'" ref="canvas" class="qrcode" :class="{ qrcodescreen: isScreen }"></canvas>
 
     <component :is="game" />
 
@@ -48,6 +48,7 @@ export default {
     return {
       socket: socket,
       isMod: this.$route.query.role === 'mod',
+      isScreen: this.$route.query.role === 'screen',
       wordList,
       blankList: new Array(wordList.length),
       isLocked: false,
@@ -79,13 +80,13 @@ export default {
       console.log('success!');
     })
 
-    console.log(this.$refs.canvasBig)
+    //console.log(this.$refs.canvasBig)
     QRCode.toCanvas(this.$refs.canvasBig, this.url, {
       scale: 8,
       margin: 0,
       color: {
-        dark: '#000',  // Blue dots
-        light: '#0000' // Transparent background
+        dark: '#000',  // Black dots
+        light: '#fff' // White bg
       }
     }, function (error) {
       if (error) console.error(error)
@@ -199,17 +200,25 @@ export default {
     z-index: 1;
   }
 
-  #qrcodebig {
+  #qrcode-big {
     position: block;
     margin: auto;
 
-    width: 100%;
+    width:100%;
     padding: 1em;
     background: white;
   }
 
   .qrcode {
     font-size: 1.2rem;
+  }
+
+  .qrcodescreen {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 7em !important;
+    height: 7em !important;
   }
   @media (min-width: calc(336px)) {
     .qrcode {
@@ -223,4 +232,5 @@ export default {
       font-size: 2rem;
     }
   }
+  
 </style>
