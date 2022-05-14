@@ -62,8 +62,8 @@ export default function(socketInstance) {
       state.votes = {
         Piano: 0,
         Guitar: 0,
-        Bass: 0,
-        Drums: 0,
+        /*Bass: 0,*/
+        Drums: 0
       }
 
       socket.emit('new state', state)
@@ -160,8 +160,8 @@ export default function(socketInstance) {
       state.votes = {
         Piano: 0,
         Guitar: 0,
-        Bass: 0,
-        Drums: 0,
+        /*Bass: 0,*/
+        Drums: 0
       }
 
       state.ravenState = 'voting'
