@@ -98,7 +98,7 @@ export default {
       displayText: {
         Piano: "Piano 🎹",
         Guitar: "Guitar 🎸",
-        /*Bass: "Bass 🎻",*/
+        Bass: "Bass 🎻",
         Drums: "Drums 🥁"
       }
       // Only one WordSelector is allowed open at a time.
