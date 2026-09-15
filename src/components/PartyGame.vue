@@ -167,6 +167,11 @@ export default {
         cb();
       }
     },
+    offerReset() {
+      if (confirm('Are you sure you want to reset everything?')) {
+        this.sendReset()
+      }
+    },
     sendReset() {
       this.socket.emit('send reset')
     },
