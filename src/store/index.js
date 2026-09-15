@@ -1,11 +1,8 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 import VuexPersistence from 'vuex-persist'
 
 import identity from './modules/identity'
 import party from './modules/party'
-
-Vue.use(Vuex)
 
 const vuexPersist = new VuexPersistence({
   key: 'quest-vuex',
@@ -13,7 +10,7 @@ const vuexPersist = new VuexPersistence({
   reducer: (state) => ({ identity: state.identity }),
 })
 
-const store = new Vuex.Store({
+const store = createStore({
   state: {
     counter: 0,
   },

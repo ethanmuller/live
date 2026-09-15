@@ -21,31 +21,28 @@ export default {
   props: ['length', 'anchor', 'wordList', 'blankList', 'socket', 'isLocked', 'i'],
   data() {
     return {
-      word: "",
-      pastWords: [],
       isWordListOpen: false,
       lengthClass: `word-group word-group--length-${this.length}`,
       wordListClass: 'word-list',
     }
   },
-  watch: {
-    "word": function(to, from) {
-      this.pastWords.unshift(to)
-    },
-  },
   computed: {
     "underscores": function() {
       return "＿".repeat(parseInt(this.length, 10))
     },
+    "blankValue": function() {
+      return this.blankList[this.i]
+    },
     "isBeingEditedByMe": function() {
-      // todo: move this method out of computed property.
-      // maybe calculate index on mount instead?
-      return this.blankList[this.i] === this.socket.id && typeof this.socket.id !== 'undefined'
+      return this.blankValue === this.socket.id && typeof this.socket.id !== 'undefined'
     },
     "isBeingEdited": function() {
-      // todo: move this method out of computed property.
-      // maybe calculate index on mount instead?
-      return this.blankList[this.i] && this.blankList[this.i].length === 20
+      return !!this.blankValue && this.blankValue.length === 20
+    },
+    "word": function() {
+      // a blank holds a socket id (20 chars) while someone has it open, and
+      // the chosen word otherwise
+      return (this.blankValue && !this.isBeingEdited) ? this.blankValue : ''
     },
   },
   methods: {
@@ -64,22 +61,15 @@ export default {
     isWordUsed(word) {
       return this.blankList.indexOf(word) > -1
     },
-    setWord(word) {
-      // this function is called by parent to programmatically set words
-      this.word = word
-    },
     submitWord(e) {
-      this.word = e.target.innerHTML
+      const to = e.target.innerHTML
+      const from = this.word
 
-      const i = this.i
-      const to = this.word
-      const from = this.pastWords[0]
-
-      this.socket.emit('submit word', to, from, i, (err) => {
+      this.socket.emit('submit word', to, from, this.i, (err) => {
         if (err) {
-          // revert back to previous state
+          // the server rejected it, so blankList (and this.word) is already
+          // back to how it was - nothing to revert
           alert(err.err)
-          this.word = from
         }
       })
     },

@@ -1,13 +1,10 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from './views/Home.vue'
 import Mod from './views/Mod.vue'
 import Joining from './views/Joining.vue'
 import Beast from './views/Beast.vue'
 import PartyView from './views/PartyView.vue'
-
-Vue.use(VueRouter)
 
 // Route names/paths mirror the old Nuxt file-based routes, since app code
 // pushes to some of these by name (e.g. 'party-party', matching Nuxt's
@@ -20,8 +17,8 @@ const routes = [
   { path: '/party/:party', name: 'party-party', component: PartyView },
 ]
 
-const router = new VueRouter({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(),
   routes,
 })
 

@@ -63,24 +63,6 @@ export default {
     }
   },
 
-  watch: {
-    'blankList': function(blankList) {
-      // whenever blankList changes,
-      // we programatically update each WordSelector component
-      // to reflect the newly received list of what words are in which slots
-
-      const wordSelectorComponents = this.$children.filter(c => c.$options._componentTag === 'WordSelector')
-
-      wordSelectorComponents.forEach((wordSelector,index) => {
-        if (!!blankList[index] && blankList[index].length !== 20) {
-          wordSelector.setWord(blankList[index])
-        } else {
-          wordSelector.setWord('')
-        }
-      })
-    }
-  },
-
   mounted() {
     this.url = window.location.protocol + '//' + window.location.host + window.location.pathname
 
@@ -92,7 +74,7 @@ export default {
     })
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
   },
 
   methods: {
@@ -117,14 +99,6 @@ export default {
     },
     sendUnlock() {
       this.socket.emit('unlock state')
-    },
-    reset() {
-      this.blankList = new Array(wordList.length)
-      const wordSelectorComponents = this.$children.filter(c => c._name === '<WordSelector>');
-
-      wordSelectorComponents.forEach((wordSelector,index) => {
-        wordSelector.setWord('')
-      })
     },
 
     setState(newState) {

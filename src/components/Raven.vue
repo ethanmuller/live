@@ -53,7 +53,7 @@
       <div v-if="ravenState=='voting'">
 
         <TransitionGroup name="list" tag="ul">
-          <li v-for="item in orderedVotes" :key="item[0]" class="" class="vote-btn">
+          <li v-for="item in orderedVotes" :key="item[0]" class="vote-btn">
             <span class="results-bg"></span>
             <span class="results-bar" :style="{ width: `${ item[1] / Math.max(totalVotes, 1) * 100 }%` }"></span>
             {{displayText[item[0]]}}
@@ -168,7 +168,7 @@ export default {
     })
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
   },
 
   methods: {

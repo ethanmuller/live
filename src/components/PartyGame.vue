@@ -68,34 +68,21 @@ export default {
   },
 
 
+  watch: {
+    // the small/big QR canvases are swapped in and out by v-if depending
+    // on `game`, and whichever one is relevant doesn't exist in the DOM
+    // yet the first time this component mounts (game starts out as ''),
+    // so redraw whichever canvas is currently present every time `game`
+    // changes, once Vue has actually updated the DOM for it
+    game() {
+      this.$nextTick(this.drawQRCodes)
+    },
+  },
+
   mounted() {
     this.url = window.location.protocol + '//' + window.location.host + window.location.pathname
 
-
-    QRCode.toCanvas(this.$refs.canvas, this.url, {
-      scale: 8,
-      margin: 0,
-      color: {
-        dark: '#000',  // Blue dots
-        light: '#0000' // Transparent background
-      }
-    }, function (error) {
-      if (error) console.error(error)
-      console.log('success!');
-    })
-
-    //console.log(this.$refs.canvasBig)
-    QRCode.toCanvas(this.$refs.canvasBig, this.url, {
-      scale: 8,
-      margin: 0,
-      color: {
-        dark: '#000',  // Black dots
-        light: '#fff' // White bg
-      }
-    }, function (error) {
-      if (error) console.error(error)
-      console.log('success!');
-    })
+    this.drawQRCodes()
 
     this.socket.on('connect', this.connect)
     this.socket.on('new state', this.setState)
@@ -107,13 +94,40 @@ export default {
     })
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.socket.off('connect', this.connect)
     this.socket.off('new state', this.setState)
     this.socket.off('end party', this.receivePartyEnd)
   },
 
   methods: {
+  drawQRCodes() {
+    if (this.$refs.canvas) {
+      QRCode.toCanvas(this.$refs.canvas, this.url, {
+        scale: 8,
+        margin: 0,
+        color: {
+          dark: '#000',  // Blue dots
+          light: '#0000' // Transparent background
+        }
+      }, function (error) {
+        if (error) console.error(error)
+      })
+    }
+
+    if (this.$refs.canvasBig) {
+      QRCode.toCanvas(this.$refs.canvasBig, this.url, {
+        scale: 8,
+        margin: 0,
+        color: {
+          dark: '#000',  // Black dots
+          light: '#fff' // White bg
+        }
+      }, function (error) {
+        if (error) console.error(error)
+      })
+    }
+  },
   endRound() {
     this.socket.emit('end round')
   },
@@ -133,13 +147,6 @@ export default {
     },
     wordSelectorClose() {
       this.openWordSelectorIndex = -1
-    },
-    findIndexOfInstance(self) {
-      // this is a dodgy function, but it's what we use
-      // to figure out the index this word lives at
-      return self.$parent.$children
-        .filter(c => c._name === '<WordSelector>') // Filter out other component types
-        .indexOf(this)
     },
 
     receivePartyEnd() {
@@ -168,14 +175,6 @@ export default {
     },
     sendUnlock() {
       this.socket.emit('unlock state')
-    },
-    reset() {
-      this.blankList = new Array(wordList.length)
-      const wordSelectorComponents = this.$children.filter(c => c._name === '<WordSelector>');
-
-      wordSelectorComponents.forEach((wordSelector,index) => {
-        wordSelector.setWord('')
-      })
     },
 
     setState(newState) {

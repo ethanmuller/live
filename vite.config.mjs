@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { defineConfig } from 'vite'
-import createVue2Plugin from '@vitejs/plugin-vue2'
+import vue from '@vitejs/plugin-vue'
 import path from 'path'
 
 // The backend (Express + Socket.IO + party API) runs as its own process
@@ -11,7 +11,7 @@ const clientPort = process.env.CLIENT_PORT || 8008
 const backendPort = process.env.PORT || 8009
 
 export default defineConfig({
-  plugins: [createVue2Plugin()],
+  plugins: [vue()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

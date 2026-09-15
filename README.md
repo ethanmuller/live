@@ -5,7 +5,7 @@ The idea is to make multiplayer games where large numbers of players can join. I
 don't know what the upper limit of concurrent players is, so please tell me if
 you find out.
 
-The UI is built in [Vue 2](https://v2.vuejs.org/), bundled with [Vite](https://vitejs.dev/). The backend (party API, avatar uploads, Socket.IO game state) is a small Express app in `server/`.
+The UI is built in [Vue 3](https://vuejs.org/), bundled with [Vite](https://vitejs.dev/). The backend (party API, avatar uploads, Socket.IO game state) is a small Express app in `server/`.
 
 Each party currently picks one of three games: **YenTing** (a static/idle screen), **FillingIn** (填充題, a fill-in-the-blank poem), and **Raven** (an instrument voting game). The mod can switch a running party between them live from the mod panel.
 
