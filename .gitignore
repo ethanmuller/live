@@ -35,7 +35,8 @@ bower_components
 build/Release
 
 # uploads
-static/uploads
+/uploads/*
+!/uploads/.gitkeep
 
 # Dependency directories
 node_modules/
@@ -68,10 +69,7 @@ typings/
 # next.js build output
 .next
 
-# nuxt.js build output
-.nuxt
-
-# Nuxt generate
+# vite build output
 dist
 
 # vuepress build output

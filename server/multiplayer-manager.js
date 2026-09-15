@@ -1,21 +1,11 @@
-let wordList = require('../fei-words.js')
+const wordList = require('./fei-words.js')
 
 let state = {
   blankList: new Array(wordList.length),
   isLocked: false,
 }
 
-function deepCopy(data) {
-  return JSON.parse(JSON.stringify(data))
-}
-
-const originalWordList = deepCopy(wordList)
-
-export let io = null;
-
-export default function(socketInstance) {
-  io = socketInstance
-
+module.exports = function (socketInstance) {
   socketInstance.on('connection', (socket) => {
     console.log('HELLO ', socket.id)
 
