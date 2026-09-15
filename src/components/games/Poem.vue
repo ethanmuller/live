@@ -89,20 +89,27 @@ export default {
       console.log('success!');
     })
 
-    this.socket.on('connect', this.connect)
+    // (re-)join the party's room every time we connect, since a dropped
+    // and reconnected socket (e.g. a phone backgrounding the tab) gets a
+    // new connection and isn't in any room until it joins again
+    this.socket.on('connect', this.joinParty)
     this.socket.on('new state', this.setState)
-    this.socket.emit('join', (state) => {
-      this.blankList = state.blankList
-      this.isLocked = state.isLocked
-    })
+    if (this.socket.connected) {
+      this.joinParty()
+    }
   },
 
   beforeDestroy() {
+    this.socket.off('connect', this.joinParty)
+    this.socket.off('new state', this.setState)
   },
 
   methods: {
-    connect() {
-      console.log('connected')
+    joinParty() {
+      this.socket.emit('join', this.$route.params.party, (state) => {
+        this.blankList = state.blankList
+        this.isLocked = state.isLocked
+      })
     },
     wordSelectorOpen(i) {
     },

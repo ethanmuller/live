@@ -1,15 +1,29 @@
 const wordList = require('./fei-words.js')
 
-let state = {
-  blankList: new Array(wordList.length),
-  isLocked: false,
+// One game state per party, instead of one global state shared by everybody.
+const partyStates = new Map()
+
+function getState(partyId) {
+  if (!partyStates.has(partyId)) {
+    partyStates.set(partyId, {
+      blankList: new Array(wordList.length),
+      isLocked: false,
+    })
+  }
+  return partyStates.get(partyId)
 }
 
-module.exports = function (socketInstance) {
-  socketInstance.on('connection', (socket) => {
+module.exports = function (io) {
+  io.on('connection', (socket) => {
     console.log('HELLO ', socket.id)
 
     function closeWordSelector() {
+      const partyId = socket.data.partyId
+      if (!partyId) {
+        return
+      }
+
+      const state = getState(partyId)
       let index = state.blankList.indexOf(socket.id)
 
       if (index === -1) {
@@ -21,54 +35,87 @@ module.exports = function (socketInstance) {
         index = state.blankList.indexOf(socket.id)
       }
 
-      socket.emit('new state', state)
-      socket.broadcast.emit('new state', state)
+      io.to(partyId).emit('new state', state)
     }
 
-    socket.on('join', function (cb) {
-      cb(state)
+    socket.on('join', function (partyId, cb) {
+      if (socket.data.partyId && socket.data.partyId !== partyId) {
+        socket.leave(socket.data.partyId)
+      }
+
+      socket.data.partyId = partyId
+      socket.join(partyId)
+
+      cb(getState(partyId))
     })
 
     socket.on('send reset', () => {
+      const partyId = socket.data.partyId
+      if (!partyId) {
+        return
+      }
+
       console.log('RESET ')
 
+      const state = getState(partyId)
       state.blankList = new Array(wordList.length)
       state.isLocked = false
 
-      socket.emit('new state', state)
-      socket.broadcast.emit('new state', state)
+      io.to(partyId).emit('new state', state)
     })
 
     socket.on('open word selector', (i) => {
+      const partyId = socket.data.partyId
+      if (!partyId) {
+        return
+      }
+
+      const state = getState(partyId)
+
       if (state.blankList.indexOf(socket.id) > -1) {
         closeWordSelector()
       }
 
       state.blankList[i] = socket.id
 
-      socket.emit('new state', state)
-      socket.broadcast.emit('new state', state)
+      io.to(partyId).emit('new state', state)
     })
 
     socket.on('close word selector', closeWordSelector)
 
     socket.on('lock state', () => {
+      const partyId = socket.data.partyId
+      if (!partyId) {
+        return
+      }
+
       console.log('LOCK  ', socket.id)
+      const state = getState(partyId)
       state.isLocked = true
-      socket.emit('new state', state)
-      socket.broadcast.emit('new state', state)
+      io.to(partyId).emit('new state', state)
     })
 
     socket.on('unlock state', () => {
+      const partyId = socket.data.partyId
+      if (!partyId) {
+        return
+      }
+
       console.log('UNLOCK ', socket.id)
+      const state = getState(partyId)
       state.isLocked = false
-      socket.emit('new state', state)
-      socket.broadcast.emit('new state', state)
+      io.to(partyId).emit('new state', state)
     })
 
-    socket.on('submit word', function (to,from,indexOfBlank, callback) {
+    socket.on('submit word', function (to, from, indexOfBlank, callback) {
+      const partyId = socket.data.partyId
+      if (!partyId) {
+        return callback({ err: 'not in a party' })
+      }
+
       console.log('WORD  ', socket.id, ': ', to, from)
 
+      const state = getState(partyId)
       const word = to
 
       // make sure word isn't already used
@@ -87,13 +134,12 @@ module.exports = function (socketInstance) {
         state.blankList[fromIndex] = null
       }
 
-      // tell everybody about the new selected word
-      socket.emit('new state', state)
-      socket.broadcast.emit('new state', state)
+      // tell everybody in this party about the new selected word
+      io.to(partyId).emit('new state', state)
       return callback()
     })
 
-    socket.on('disconnect', function (fn) {
+    socket.on('disconnect', function () {
       closeWordSelector()
       console.log('BYE!  ', socket.id)
     })
