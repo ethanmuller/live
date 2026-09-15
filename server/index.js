@@ -27,6 +27,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const host = process.env.HOST || '0.0.0.0'
+// PORT always wins if set (the knob to use for Docker/deployment). Absent
+// that, dev keeps the backend on 8009 so it doesn't collide with Vite on
+// CLIENT_PORT (8008); production - one process, no Vite - defaults to 8008.
 const port = process.env.PORT || (process.env.NODE_ENV === 'production' ? 8008 : 8009)
 
 server.listen(port, host, () => {
