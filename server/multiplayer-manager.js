@@ -1,5 +1,5 @@
-const partyManager = require('../server/party-manager')
-let wordList = require('../fei-words.js')
+const partyManager = require('./party-manager')
+let wordList = require('./fei-words.js')
 
 let state = {
   game: 'YenTing',
@@ -24,9 +24,9 @@ function deepCopy(data) {
 
 const originalWordList = deepCopy(wordList)
 
-export let io = null;
+let io = null;
 
-export default function(socketInstance) {
+module.exports = function(socketInstance) {
   io = socketInstance
 
   socketInstance.on('connection', (socket) => {

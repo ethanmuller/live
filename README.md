@@ -5,7 +5,9 @@ The idea is to make multiplayer games where large numbers of players can join. I
 don't know what the upper limit of concurrent players is, so please tell me if
 you find out.
 
-The UI is built in [Vue](https://vuejs.org/), using the [NuxtJS](https://nuxtjs.org/) framework
+The UI is built in [Vue 2](https://v2.vuejs.org/), bundled with [Vite](https://vitejs.dev/). The backend (party API, avatar uploads, Socket.IO game state) is a small Express app in `server/`.
+
+Each party currently picks one of three games: **YenTing** (a static/idle screen), **FillingIn** (填充題, a fill-in-the-blank poem), and **Raven** (an instrument voting game). The mod can switch a running party between them live from the mod panel.
 
 ## Hosting locally
 You'll need `node` and `npm` installed.
@@ -13,11 +15,19 @@ You'll need `node` and `npm` installed.
 Clone this repo, and within the downloaded directory, run:
 
 ``` sh
-npm install # this will take a while to run
+npm install
 npm run dev
 ```
 
-This will start a development server on port `8008`.
+This runs the Vite dev server (frontend) and the Express/Socket.IO backend together. The frontend listens on port `8008` by default and proxies `/api`, `/uploads`, and `/socket.io` requests to the backend on port `8009`, so the whole app behaves as a single origin at `http://localhost:8008`.
+
+For production, `npm run build` produces a static `dist/` bundle, and `npm start` runs the backend in production mode, which also serves `dist/` directly (single port, defaulting to `8008`).
+
+### Configuration
+Ports are read from environment variables (see `.env.example` - copy it to `.env`, or set real env vars, e.g. for Docker):
+- `PORT` - the Express/Socket.IO backend's port. Also what Vite proxies `/api`/`/uploads`/`/socket.io` to in dev.
+- `CLIENT_PORT` - the Vite dev server's port (dev only).
+- `HOST` - the backend's bind address (default `0.0.0.0`).
 
 ## Usage
 By applying the query parameter `?role=mod`, you gain the ability to create new parties. Mods can also end parties with the big red "End Party" button. Knowledge of this flag is currently the only layer of security, so try not to broadcast this information.
