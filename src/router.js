@@ -1,21 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Home from './views/Home.vue'
-import Mod from './views/Mod.vue'
-import Joining from './views/Joining.vue'
-import PartyView from './views/PartyView.vue'
+import Poem from './views/Poem.vue'
 
 Vue.use(VueRouter)
 
-// Route names/paths mirror the old Nuxt file-based routes, since app code
-// pushes to some of these by name (e.g. 'party-party', matching Nuxt's
-// auto-generated name for pages/party/_party/index.vue).
 const routes = [
-  { path: '/', name: 'index', component: Home },
-  { path: '/mod', name: 'mod', component: Mod },
-  { path: '/joining', name: 'joining', component: Joining },
-  { path: '/party/:party', name: 'party-party', component: PartyView },
+  { path: '/', name: 'index', component: Poem },
 ]
 
 const router = new VueRouter({

@@ -5,7 +5,6 @@ const http = require('http')
 const express = require('express')
 const { Server } = require('socket.io')
 
-const partyApi = require('./api/party')
 const eggsApi = require('./api/eggs')
 const multiplayerManager = require('./multiplayer-manager')
 
@@ -15,7 +14,6 @@ const io = new Server(server)
 
 app.use(express.json())
 
-app.use('/api/party', partyApi)
 app.use('/api', eggsApi)
 
 multiplayerManager(io)

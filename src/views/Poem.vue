@@ -47,8 +47,6 @@
 
     </div>
 
-    <router-link :to="{ path: '/', query: this.$route.query }" v-if="isMod" class="partylink">&lt;- Party Index</router-link>
-
   </main>
 </template>
 
@@ -56,7 +54,7 @@
 import QRCode from 'qrcode'
 import socket from '@/socket.js'
 import wordList from '@/fei-words.js'
-import WordSelector from '../WordSelector.vue'
+import WordSelector from '@/components/WordSelector.vue'
 
 
 export default {
@@ -89,24 +87,23 @@ export default {
       console.log('success!');
     })
 
-    // (re-)join the party's room every time we connect, since a dropped
-    // and reconnected socket (e.g. a phone backgrounding the tab) gets a
-    // new connection and isn't in any room until it joins again
-    this.socket.on('connect', this.joinParty)
+    // re-join on every (re)connect, since a dropped and reconnected socket
+    // (e.g. a phone backgrounding the tab) gets a new connection id
+    this.socket.on('connect', this.joinGame)
     this.socket.on('new state', this.setState)
     if (this.socket.connected) {
-      this.joinParty()
+      this.joinGame()
     }
   },
 
   beforeDestroy() {
-    this.socket.off('connect', this.joinParty)
+    this.socket.off('connect', this.joinGame)
     this.socket.off('new state', this.setState)
   },
 
   methods: {
-    joinParty() {
-      this.socket.emit('join', this.$route.params.party, (state) => {
+    joinGame() {
+      this.socket.emit('join', (state) => {
         this.blankList = state.blankList
         this.isLocked = state.isLocked
       })
@@ -160,9 +157,6 @@ export default {
   }
   p > span {
     display: block;
-  }
-  .partylink {
-    padding: 0.5rem; display: inline-block;
   }
 
   #poemcontainer {

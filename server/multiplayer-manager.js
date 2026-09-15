@@ -1,16 +1,8 @@
 const wordList = require('./fei-words.js')
 
-// One game state per party, instead of one global state shared by everybody.
-const partyStates = new Map()
-
-function getState(partyId) {
-  if (!partyStates.has(partyId)) {
-    partyStates.set(partyId, {
-      blankList: new Array(wordList.length),
-      isLocked: false,
-    })
-  }
-  return partyStates.get(partyId)
+let state = {
+  blankList: new Array(wordList.length),
+  isLocked: false,
 }
 
 module.exports = function (io) {
@@ -18,12 +10,6 @@ module.exports = function (io) {
     console.log('HELLO ', socket.id)
 
     function closeWordSelector() {
-      const partyId = socket.data.partyId
-      if (!partyId) {
-        return
-      }
-
-      const state = getState(partyId)
       let index = state.blankList.indexOf(socket.id)
 
       if (index === -1) {
@@ -35,87 +21,49 @@ module.exports = function (io) {
         index = state.blankList.indexOf(socket.id)
       }
 
-      io.to(partyId).emit('new state', state)
+      io.emit('new state', state)
     }
 
-    socket.on('join', function (partyId, cb) {
-      if (socket.data.partyId && socket.data.partyId !== partyId) {
-        socket.leave(socket.data.partyId)
-      }
-
-      socket.data.partyId = partyId
-      socket.join(partyId)
-
-      cb(getState(partyId))
+    socket.on('join', function (cb) {
+      cb(state)
     })
 
     socket.on('send reset', () => {
-      const partyId = socket.data.partyId
-      if (!partyId) {
-        return
-      }
-
       console.log('RESET ')
 
-      const state = getState(partyId)
       state.blankList = new Array(wordList.length)
       state.isLocked = false
 
-      io.to(partyId).emit('new state', state)
+      io.emit('new state', state)
     })
 
     socket.on('open word selector', (i) => {
-      const partyId = socket.data.partyId
-      if (!partyId) {
-        return
-      }
-
-      const state = getState(partyId)
-
       if (state.blankList.indexOf(socket.id) > -1) {
         closeWordSelector()
       }
 
       state.blankList[i] = socket.id
 
-      io.to(partyId).emit('new state', state)
+      io.emit('new state', state)
     })
 
     socket.on('close word selector', closeWordSelector)
 
     socket.on('lock state', () => {
-      const partyId = socket.data.partyId
-      if (!partyId) {
-        return
-      }
-
       console.log('LOCK  ', socket.id)
-      const state = getState(partyId)
       state.isLocked = true
-      io.to(partyId).emit('new state', state)
+      io.emit('new state', state)
     })
 
     socket.on('unlock state', () => {
-      const partyId = socket.data.partyId
-      if (!partyId) {
-        return
-      }
-
       console.log('UNLOCK ', socket.id)
-      const state = getState(partyId)
       state.isLocked = false
-      io.to(partyId).emit('new state', state)
+      io.emit('new state', state)
     })
 
     socket.on('submit word', function (to, from, indexOfBlank, callback) {
-      const partyId = socket.data.partyId
-      if (!partyId) {
-        return callback({ err: 'not in a party' })
-      }
-
       console.log('WORD  ', socket.id, ': ', to, from)
 
-      const state = getState(partyId)
       const word = to
 
       // make sure word isn't already used
@@ -134,8 +82,8 @@ module.exports = function (io) {
         state.blankList[fromIndex] = null
       }
 
-      // tell everybody in this party about the new selected word
-      io.to(partyId).emit('new state', state)
+      // tell everybody about the new selected word
+      io.emit('new state', state)
       return callback()
     })
 
