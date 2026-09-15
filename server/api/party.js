@@ -26,24 +26,4 @@ app.get('/:id', (req, res) => {
   res.json(party)
 })
 
-app.post('/:id/upload', (req, res) => {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.')
-  }
-
-  const { party, socketId } = req.body
-  const drawling = req.files.drawling
-
-  const filename = `${party}-${socketId}.png`
-  const filepath = `${__dirname}/../../uploads`
-  const url = `${req.headers.origin}/uploads/${filename}?when=${Date.now()}`
-
-  drawling.mv(
-    `${filepath}/${filename}`,
-    function (err) {
-      if (err) return res.status(500).send(err)
-      res.json({ url })
-    })
-})
-
 module.exports = app

@@ -1,10 +1,8 @@
 require('dotenv').config({ quiet: true })
 
 const path = require('path')
-const fs = require('fs')
 const http = require('http')
 const express = require('express')
-const fileUpload = require('express-fileupload')
 const { Server } = require('socket.io')
 
 const partyApi = require('./api/party')
@@ -16,14 +14,9 @@ const server = http.createServer(app)
 const io = new Server(server)
 
 app.use(express.json())
-app.use(fileUpload())
 
 app.use('/api/party', partyApi)
 app.use('/api', eggsApi)
-
-const uploadsDir = path.join(__dirname, '..', 'uploads')
-fs.mkdirSync(uploadsDir, { recursive: true })
-app.use('/uploads', express.static(uploadsDir))
 
 multiplayerManager(io)
 

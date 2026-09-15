@@ -4,7 +4,6 @@ import VueRouter from 'vue-router'
 import Home from './views/Home.vue'
 import Mod from './views/Mod.vue'
 import Joining from './views/Joining.vue'
-import Beast from './views/Beast.vue'
 import PartyView from './views/PartyView.vue'
 
 Vue.use(VueRouter)
@@ -16,7 +15,6 @@ const routes = [
   { path: '/', name: 'index', component: Home },
   { path: '/mod', name: 'mod', component: Mod },
   { path: '/joining', name: 'joining', component: Joining },
-  { path: '/beast', name: 'beast', component: Beast },
   { path: '/party/:party', name: 'party-party', component: PartyView },
 ]
 

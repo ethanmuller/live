@@ -15,13 +15,6 @@
 
     <div class="host-note">
       <form @submit.prevent="createParty">
-        <label>
-          Game
-          <select v-model="selectedGame" required>
-            <option value="poem">Poem</option>
-            <option value="quest">Quest</option>
-          </select>
-        </label>
         <button class="btn btn--sm">Create Party</button>
       </form>
     </div>

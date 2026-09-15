@@ -17,7 +17,7 @@ npm install
 npm run dev
 ```
 
-This runs the Vite dev server (frontend) and the Express/Socket.IO backend together. The frontend listens on port `8008` and proxies `/api`, `/socket.io`, and `/uploads` requests to the backend on port `8009`, so the whole app behaves as a single origin at `http://localhost:8008`, same as before.
+This runs the Vite dev server (frontend) and the Express/Socket.IO backend together. The frontend listens on port `8008` and proxies `/api` and `/socket.io` requests to the backend on port `8009`, so the whole app behaves as a single origin at `http://localhost:8008`, same as before.
 
 For production, `npm run build` produces a static `dist/` bundle, and `npm start` runs the backend in production mode, which also serves `dist/` directly (single port, defaulting to `8008`, configurable via `PORT`).
 
@@ -34,6 +34,3 @@ By applying the query parameter `?role=screen`, you will display a QR code which
 
 ### QR Codes and `localhost`
 Note that if you access the app via `localhost`, QR codes direct devices to `localhost`, which will mean something different for each device. To get around this, access the site via its host's [local IP address](https://www.google.com/search?client=firefox-b-1-d&q=how+to+find+local+ip).
-
-## Known issues
-The "Poem" game (the default one you get from the mod panel) is the only one that's actually wired up and working. "Quest", "Masks", and the standalone `/beast` page are earlier, unfinished games — they reference a `Dpad`/`Btn` component pair and the `p5`/`vue-use-sound` packages that were never finished/were removed from this project, so they won't render correctly. This was already true before the Vite migration; nothing here was newly broken by it.
